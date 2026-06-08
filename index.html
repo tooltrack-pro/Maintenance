@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MUHLBAUER CT 12/88 L — Production</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f4f8;min-height:100vh;}
+.screen{display:none;min-height:100vh;}
+.screen.active{display:flex;flex-direction:column;}
+
+/* HOME */
+#home{background:linear-gradient(135deg,#1a237e,#1565c0);align-items:center;justify-content:center;}
+.home-card{background:white;border-radius:20px;padding:48px 36px;box-shadow:0 20px 60px rgba(0,0,0,0.3);text-align:center;max-width:460px;width:92%;}
+.home-logo{font-size:52px;margin-bottom:8px;}
+.home-title{font-size:20px;font-weight:800;color:#1a237e;margin-bottom:4px;}
+.home-subtitle{font-size:12px;color:#999;margin-bottom:10px;}
+.week-badge{display:inline-block;background:#e8eaf6;color:#1a237e;font-size:13px;font-weight:700;padding:6px 18px;border-radius:20px;margin-bottom:28px;}
+.role-btns{display:flex;gap:14px;}
+.role-btn{flex:1;padding:22px 12px;border:none;border-radius:14px;cursor:pointer;font-size:14px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:8px;transition:transform .15s,box-shadow .15s;}
+.role-btn:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,0.2);}
+.role-btn.operator{background:linear-gradient(135deg,#0d7c3e,#1a9e52);color:white;}
+.role-btn.tech{background:linear-gradient(135deg,#b85c00,#e67e22);color:white;}
+.role-btn .icon{font-size:34px;}
+
+/* LOGIN */
+#login{background:linear-gradient(135deg,#1a237e,#1565c0);align-items:center;justify-content:center;}
+.login-card{background:white;border-radius:20px;padding:36px;box-shadow:0 20px 60px rgba(0,0,0,0.3);width:92%;max-width:380px;}
+.login-role-badge{display:inline-block;padding:5px 14px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:1px;margin-bottom:16px;}
+.login-role-badge.operator{background:#e8f5e9;color:#0d7c3e;}
+.login-role-badge.tech{background:#fff3e0;color:#b85c00;}
+.login-card h2{font-size:20px;color:#1a237e;margin-bottom:4px;}
+.login-card p{font-size:12px;color:#999;margin-bottom:20px;}
+.form-group{margin-bottom:16px;}
+.form-group label{display:block;font-size:11px;font-weight:700;color:#666;margin-bottom:5px;letter-spacing:.5px;text-transform:uppercase;}
+.form-group input{width:100%;padding:12px 16px;border:2px solid #e0e0e0;border-radius:10px;font-size:18px;letter-spacing:4px;font-weight:700;transition:border-color .2s;outline:none;text-align:center;}
+.form-group input:focus{border-color:#1a237e;}
+.login-error{color:#c62828;font-size:12px;margin-bottom:10px;text-align:center;display:none;background:#ffebee;padding:8px;border-radius:8px;}
+.btn-primary{width:100%;padding:13px;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;color:white;background:linear-gradient(135deg,#1a237e,#1565c0);transition:transform .15s,box-shadow .15s;}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(26,35,126,.4);}
+.btn-back{background:none;border:none;color:#aaa;font-size:12px;cursor:pointer;margin-top:14px;display:block;width:100%;text-align:center;}
+
+/* TOPBAR */
+.topbar{background:#1a237e;color:white;padding:13px 18px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.topbar.tech-bar{background:#b85c00;}
+.topbar-title{font-size:15px;font-weight:700;}
+.topbar-user{font-size:11px;opacity:.8;margin-top:2px;}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.week-chip{background:rgba(255,255,255,.2);padding:4px 12px;border-radius:12px;font-size:12px;font-weight:700;}
+.topbar-logout{background:rgba(255,255,255,.15);border:none;color:white;padding:5px 12px;border-radius:8px;cursor:pointer;font-size:12px;}
+
+/* DASHBOARD */
+.dashboard-body{flex:1;padding:18px;}
+.dashboard-title{font-size:17px;font-weight:700;color:#1a237e;margin-bottom:4px;}
+.dashboard-sub{font-size:12px;color:#999;margin-bottom:20px;}
+.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.menu-card{background:white;border-radius:14px;padding:22px 14px;text-align:center;cursor:pointer;border:2px solid transparent;box-shadow:0 2px 12px rgba(0,0,0,.07);transition:transform .15s,box-shadow .15s,border-color .15s;}
+.menu-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.14);border-color:#1a237e;}
+.menu-card .icon{font-size:38px;margin-bottom:8px;}
+.menu-card h3{font-size:13px;font-weight:700;color:#1a237e;}
+.menu-card p{font-size:10px;color:#aaa;margin-top:3px;}
+
+/* PAGE HEADER */
+.page-header{background:#1a237e;color:white;padding:13px 18px;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.page-header.tech-hdr{background:#b85c00;}
+.page-header .btn-nav{background:none;border:none;color:white;font-size:20px;cursor:pointer;}
+.page-header h2{font-size:15px;font-weight:700;}
+.page-content{flex:1;padding:14px;overflow-y:auto;}
+
+/* CHECKLIST NIV0 */
+.checklist-header{background:white;border-radius:12px;padding:14px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.07);}
+.checklist-header h3{font-size:14px;font-weight:700;color:#1a237e;margin-bottom:10px;}
+.header-fields{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.field-group label{font-size:10px;color:#999;display:block;margin-bottom:3px;text-transform:uppercase;font-weight:600;}
+.field-group input,.field-group select{width:100%;padding:8px 10px;border:1.5px solid #e0e0e0;border-radius:8px;font-size:13px;outline:none;}
+.field-group input:focus,.field-group select:focus{border-color:#1a237e;}
+.section-title{background:#1a237e;color:white;padding:9px 14px;border-radius:8px;font-size:12px;font-weight:700;margin-bottom:8px;letter-spacing:.5px;}
+.checklist-item{background:white;border-radius:10px;padding:12px 14px;margin-bottom:7px;display:flex;align-items:center;gap:10px;box-shadow:0 1px 6px rgba(0,0,0,.06);}
+.item-img{width:64px;height:52px;object-fit:cover;border-radius:7px;flex-shrink:0;}
+.item-text{flex:1;font-size:12px;color:#333;line-height:1.4;}
+.item-checks{display:flex;gap:6px;flex-shrink:0;}
+.check-btn{width:38px;height:38px;border-radius:50%;border:2px solid;cursor:pointer;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all .15s;background:white;}
+.check-btn.ok{border-color:#2e7d32;color:#2e7d32;}
+.check-btn.ok.active{background:#2e7d32;color:white;}
+.check-btn.nok{border-color:#c62828;color:#c62828;}
+.check-btn.nok.active{background:#c62828;color:white;}
+
+/* PASSATION */
+.passation-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.passation-col{background:white;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.07);}
+.passation-col-header{background:#283593;color:white;padding:9px 12px;font-size:12px;font-weight:700;}
+.passation-item{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-bottom:1px solid #f0f0f0;}
+.passation-item:last-child{border-bottom:none;}
+.passation-item span{font-size:11px;color:#333;flex:1;}
+.mini-checks{display:flex;gap:4px;}
+.mini-btn{width:28px;height:28px;border-radius:50%;border:2px solid;cursor:pointer;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all .15s;background:white;}
+.mini-btn.ok{border-color:#2e7d32;color:#2e7d32;}
+.mini-btn.ok.active{background:#2e7d32;color:white;}
+.mini-btn.nok{border-color:#c62828;color:#c62828;}
+.mini-btn.nok.active{background:#c62828;color:white;}
+.passation-questions{margin-top:12px;background:white;border-radius:12px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,.07);}
+.passation-questions h4{font-size:12px;font-weight:700;color:#1a237e;margin-bottom:10px;text-transform:uppercase;}
+.question-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f5f5f5;flex-wrap:wrap;gap:6px;}
+.question-row:last-child{border-bottom:none;}
+.question-label{font-size:12px;color:#333;flex:1;min-width:120px;}
+.question-input{border:1.5px solid #e0e0e0;border-radius:6px;padding:4px 8px;font-size:11px;outline:none;}
+.question-input:focus{border-color:#1a237e;}
+.yesno-btns{display:flex;gap:5px;}
+.yesno-btn{padding:4px 12px;border-radius:6px;border:2px solid;cursor:pointer;font-size:11px;font-weight:700;background:white;transition:all .15s;}
+.yesno-btn.yes{border-color:#2e7d32;color:#2e7d32;}
+.yesno-btn.yes.active{background:#2e7d32;color:white;}
+.yesno-btn.no{border-color:#c62828;color:#c62828;}
+.yesno-btn.no.active{background:#c62828;color:white;}
+.obs-box{width:100%;min-height:70px;padding:10px 12px;border:1.5px solid #e0e0e0;border-radius:8px;font-size:12px;resize:vertical;outline:none;font-family:inherit;}
+.obs-box:focus{border-color:#1a237e;}
+
+/* FICHE SUIVI */
+.week-info-bar{background:linear-gradient(135deg,#1a237e,#283593);color:white;border-radius:12px;padding:14px 18px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;}
+.week-info-bar .wlabel{font-size:13px;opacity:.8;}
+.week-info-bar .wvalue{font-size:22px;font-weight:800;}
+.of-launch{background:white;border-radius:12px;padding:14px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07);}
+.of-launch h4{font-size:13px;font-weight:700;color:#1a237e;margin-bottom:10px;}
+.of-form{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.of-field label{font-size:10px;color:#999;display:block;margin-bottom:3px;text-transform:uppercase;font-weight:600;}
+.of-field input{width:100%;padding:8px 10px;border:1.5px solid #e0e0e0;border-radius:8px;font-size:13px;outline:none;}
+.of-field input:focus{border-color:#1a237e;}
+.btn-add{background:#1a237e;color:white;border:none;border-radius:8px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;width:100%;margin-top:10px;}
+
+/* OF CARDS — tableau de bord */
+.of-board{margin-bottom:14px;}
+.of-board h4{font-size:13px;font-weight:700;color:#1a237e;margin-bottom:10px;}
+.of-card{background:white;border-radius:12px;padding:14px;margin-bottom:10px;box-shadow:0 2px 10px rgba(0,0,0,.08);border-left:5px solid #1a237e;}
+.of-card.done{border-left-color:#2e7d32;opacity:.75;}
+.of-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.of-num-badge{background:#1a237e;color:white;font-size:11px;font-weight:700;padding:3px 10px;border-radius:10px;}
+.of-ref{font-size:12px;color:#666;}
+.of-progress-bar{height:8px;background:#e0e0e0;border-radius:4px;overflow:hidden;margin-bottom:8px;}
+.of-progress-fill{height:100%;background:linear-gradient(90deg,#1a9e52,#0d7c3e);border-radius:4px;transition:width .4s;}
+.of-stats{display:flex;gap:10px;flex-wrap:wrap;}
+.of-stat{text-align:center;}
+.of-stat .val{font-size:18px;font-weight:800;}
+.of-stat .lbl{font-size:10px;color:#999;text-transform:uppercase;}
+.of-stat.green .val{color:#0d7c3e;}
+.of-stat.orange .val{color:#e67e22;}
+.of-stat.blue .val{color:#1a237e;}
+.of-actions{display:flex;gap:6px;margin-top:10px;}
+.of-btn{flex:1;padding:8px;border:none;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700;}
+.of-btn.add-qty{background:#e8f5e9;color:#0d7c3e;}
+.of-btn.close-of{background:#ffebee;color:#c62828;}
+
+/* SAISIE QUANTITE */
+.qty-modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:9000;display:none;}
+.qty-modal.open{display:flex;}
+.qty-modal-card{background:white;border-radius:16px;padding:28px 24px;width:90%;max-width:340px;text-align:center;}
+.qty-modal-card h3{font-size:16px;font-weight:700;color:#1a237e;margin-bottom:6px;}
+.qty-modal-card p{font-size:12px;color:#999;margin-bottom:18px;}
+.qty-modal-card input{width:100%;padding:14px;font-size:24px;font-weight:800;border:2px solid #e0e0e0;border-radius:10px;text-align:center;outline:none;margin-bottom:16px;}
+.qty-modal-card input:focus{border-color:#1a237e;}
+.qty-modal-btns{display:flex;gap:10px;}
+.qty-modal-btns button{flex:1;padding:12px;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;}
+.qty-modal-btns .confirm{background:#1a237e;color:white;}
+.qty-modal-btns .cancel{background:#f0f0f0;color:#666;}
+
+/* MAINTENANCE */
+.maint-item{background:white;border-radius:12px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden;}
+.maint-item-header{background:#e8eaf6;padding:11px 14px;display:flex;align-items:center;gap:8px;}
+.step-badge{background:#1a237e;color:white;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}
+.zone-name{font-size:12px;font-weight:700;color:#1a237e;flex:1;}
+.maint-body{padding:12px 14px;}
+.maint-img-wrap{width:100%;margin-bottom:10px;text-align:center;background:#f5f5f5;border-radius:8px;overflow:hidden;}
+.maint-img{width:100%;max-height:200px;object-fit:contain;display:block;}
+.maint-action{font-size:12px;color:#444;margin-bottom:8px;line-height:1.5;}
+.maint-product{font-size:10px;color:#999;margin-bottom:10px;font-style:italic;}
+.maint-check-row{display:flex;gap:8px;}
+
+/* ACTION CORRECTIVE */
+.action-form{background:white;border-radius:12px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,.07);}
+.action-form h4{font-size:14px;font-weight:700;color:#1a237e;margin-bottom:14px;}
+.form-row{margin-bottom:12px;}
+.form-row label{display:block;font-size:10px;font-weight:700;color:#999;margin-bottom:5px;letter-spacing:.5px;text-transform:uppercase;}
+.form-row input,.form-row select,.form-row textarea{width:100%;padding:9px 12px;border:1.5px solid #e0e0e0;border-radius:8px;font-size:13px;outline:none;font-family:inherit;}
+.form-row input:focus,.form-row select:focus,.form-row textarea:focus{border-color:#1a237e;}
+.form-row textarea{min-height:70px;resize:vertical;}
+.severity-btns{display:flex;gap:6px;}
+.sev-btn{flex:1;padding:9px;border:2px solid #e0e0e0;border-radius:8px;cursor:pointer;font-size:11px;font-weight:700;background:white;text-align:center;transition:all .15s;}
+.sev-btn.low{border-color:#2e7d32;color:#2e7d32;}
+.sev-btn.low.active{background:#2e7d32;color:white;}
+.sev-btn.med{border-color:#f57f17;color:#f57f17;}
+.sev-btn.med.active{background:#f57f17;color:white;}
+.sev-btn.high{border-color:#c62828;color:#c62828;}
+.sev-btn.high.active{background:#c62828;color:white;}
+.btn-submit{background:linear-gradient(135deg,#b85c00,#e67e22);color:white;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;width:100%;margin-top:6px;}
+.btn-save{background:linear-gradient(135deg,#0d7c3e,#1a9e52);color:white;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;width:100%;margin-top:10px;}
+
+/* HISTORIQUE SEMAINES */
+.hist-card{background:white;border-radius:12px;margin-top:12px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden;}
+.hist-card-header{padding:12px 14px;border-bottom:2px solid #e0e0e0;display:flex;align-items:center;justify-content:space-between;}
+.hist-card-header h4{margin:0;font-size:13px;font-weight:700;color:#1a237e;}
+.hist-week-item{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid #f5f5f5;}
+.hist-week-item:last-child{border-bottom:none;}
+
+/* TOAST */
+.success-toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#2e7d32;color:white;padding:11px 22px;border-radius:10px;font-size:13px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,.3);opacity:0;transition:opacity .3s;pointer-events:none;z-index:9999;white-space:nowrap;}
+.success-toast.show{opacity:1;}
+
+/* ===== QR CODE SCANNER ===== */
+.qr-scanner-modal{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:16px;}
+.qr-scanner-card{background:#1a1a2e;border-radius:20px;padding:24px;width:92%;max-width:420px;color:white;}
+.qr-scanner-card h3{font-size:16px;font-weight:700;margin-bottom:8px;color:#90caf9;}
+.qr-scanner-card p{font-size:12px;color:#aaa;margin-bottom:16px;}
+.qr-video-wrap{position:relative;width:100%;border-radius:12px;overflow:hidden;background:#000;aspect-ratio:1;}
+.qr-video-wrap video{width:100%;height:100%;object-fit:cover;display:block;}
+.qr-corner{position:absolute;width:40px;height:40px;border-color:#4fc3f7;border-style:solid;border-width:0;}
+.qr-corner.tl{top:12px;left:12px;border-top-width:3px;border-left-width:3px;border-radius:6px 0 0 0;}
+.qr-corner.tr{top:12px;right:12px;border-top-width:3px;border-right-width:3px;border-radius:0 6px 0 0;}
+.qr-corner.bl{bottom:12px;left:12px;border-bottom-width:3px;border-left-width:3px;border-radius:0 0 0 6px;}
+.qr-corner.br{bottom:12px;right:12px;border-bottom-width:3px;border-right-width:3px;border-radius:0 0 6px 0;}
+.qr-scan-line{position:absolute;left:10%;right:10%;height:2px;background:linear-gradient(90deg,transparent,#4fc3f7,transparent);animation:qrscan 2s linear infinite;}
+@keyframes qrscan{0%{top:12%;}100%{top:88%;}}
+.qr-manual-input{display:flex;gap:8px;margin-top:12px;}
+.qr-manual-input input{flex:1;padding:10px 12px;border-radius:8px;border:1.5px solid #444;background:#111;color:white;font-size:13px;outline:none;}
+.qr-manual-input input:focus{border-color:#4fc3f7;}
+.qr-manual-input button{padding:10px 14px;border-radius:8px;background:#4fc3f7;border:none;color:#000;font-weight:700;cursor:pointer;font-size:13px;}
+.qr-progress-wrap{background:#111;border-radius:12px;padding:16px;margin-top:12px;}
+.qr-progress-title{font-size:13px;font-weight:700;color:#90caf9;margin-bottom:8px;}
+.qr-progress-bar-bg{height:8px;background:#333;border-radius:4px;overflow:hidden;margin-bottom:8px;}
+.qr-progress-bar-fill{height:100%;background:linear-gradient(90deg,#4fc3f7,#00e676);border-radius:4px;transition:width .4s;}
+.qr-progress-text{font-size:11px;color:#aaa;}
+.qr-last-scan{font-size:12px;color:#00e676;background:rgba(0,230,118,.1);border-radius:6px;padding:8px 12px;margin-top:8px;min-height:32px;}
+.qr-close-btn{background:rgba(255,255,255,.1);border:none;color:white;padding:10px 24px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:600;}
+.qr-report-btn{background:linear-gradient(135deg,#00b894,#00cec9);border:none;color:white;padding:12px 28px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:700;width:100%;margin-top:8px;}
+.qr-mode-toggle{background:linear-gradient(135deg,#283593,#3949ab);color:white;border:none;border-radius:10px;padding:11px 18px;font-size:13px;font-weight:700;cursor:pointer;width:100%;margin-bottom:12px;display:flex;align-items:center;gap:8px;justify-content:center;}
+.item-qr-status{font-size:11px;font-weight:700;padding:3px 8px;border-radius:8px;min-width:40px;text-align:center;}
+.item-qr-status.ok{background:#2e7d32;color:white;}
+.item-qr-status.nok{background:#c62828;color:white;}
+.item-qr-status.pending{background:#e0e0e0;color:#666;}
+.qr-report-modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:9998;}
+.qr-report-modal.open{display:flex;}
+.qr-report-card{background:white;border-radius:20px;padding:24px;width:92%;max-width:520px;max-height:90vh;overflow-y:auto;}
+.qr-report-card h2{font-size:18px;font-weight:800;color:#1a237e;margin-bottom:4px;}
+.qr-report-card .meta{font-size:12px;color:#999;margin-bottom:16px;}
+.report-section{margin-bottom:16px;}
+.report-section-title{background:#283593;color:white;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:700;margin-bottom:8px;}
+.report-item{display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:8px;background:#f8f9fa;margin-bottom:5px;font-size:12px;}
+.report-item .ri-text{flex:1;color:#333;}
+.report-item .ri-badge{padding:3px 10px;border-radius:6px;font-size:11px;font-weight:700;}
+.ri-badge.ok{background:#2e7d32;color:white;}
+.ri-badge.nok{background:#c62828;color:white;}
+.ri-badge.pending{background:#e0e0e0;color:#666;}
+.report-summary-bar{display:flex;gap:10px;margin-bottom:16px;}
+.rs-stat{flex:1;text-align:center;border-radius:10px;padding:12px 6px;}
+.rs-stat .val{font-size:22px;font-weight:800;}
+.rs-stat .lbl{font-size:10px;text-transform:uppercase;opacity:.8;}
+.rs-ok{background:#e8f5e9;color:#2e7d32;}
+.rs-nok{background:#ffebee;color:#c62828;}
+.rs-pending{background:#f5f5f5;color:#666;}
+.rs-total{background:#e8eaf6;color:#1a237e;}
+/* QR Codes display grid */
+.qr-codes-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;}
+.qr-code-card{background:#f8f9fa;border-radius:8px;padding:10px;text-align:center;font-size:10px;color:#333;}
+.qr-code-card canvas{display:block;margin:0 auto 4px;}
+.qr-code-ok{border:2px solid #2e7d32;}
+.qr-code-nok{border:2px solid #c62828;}
+
+/* ===== HISTORIQUE GLOBAL ===== */
+.hist-fab{position:fixed;bottom:20px;right:20px;z-index:8000;background:linear-gradient(135deg,#1a237e,#283593);color:white;border:none;border-radius:50px;padding:12px 18px;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(26,35,126,.4);display:flex;align-items:center;gap:6px;}
+.hist-modal{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:8500;display:none;align-items:flex-end;justify-content:center;}
+.hist-modal.open{display:flex;}
+.hist-panel{background:#f5f7ff;border-radius:24px 24px 0 0;width:100%;max-width:600px;max-height:92vh;overflow:hidden;display:flex;flex-direction:column;}
+.hist-panel-header{background:#1a237e;color:white;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.hist-panel-header h3{font-size:16px;font-weight:800;margin:0;}
+.hist-close{background:rgba(255,255,255,.15);border:none;color:white;border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;}
+.hist-tabs{display:flex;background:#e8eaf6;flex-shrink:0;}
+.hist-tab{flex:1;padding:10px 6px;font-size:11px;font-weight:700;border:none;background:transparent;cursor:pointer;color:#5c6bc0;border-bottom:3px solid transparent;}
+.hist-tab.active{color:#1a237e;border-bottom-color:#1a237e;background:white;}
+.hist-body{overflow-y:auto;flex:1;padding:14px;}
+.hist-section-title{font-size:12px;font-weight:800;color:#1a237e;margin:8px 0 6px;padding-left:4px;border-left:3px solid #1a237e;}
+.hist-entry{background:white;border-radius:10px;padding:10px 12px;margin-bottom:8px;box-shadow:0 1px 4px rgba(0,0,0,.07);}
+.hist-entry-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
+.hist-entry-date{font-size:11px;color:#888;}
+.hist-entry-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;}
+.hbadge-ok{background:#e8f5e9;color:#2e7d32;}
+.hbadge-nok{background:#ffebee;color:#c62828;}
+.hbadge-done{background:#e8f5e9;color:#1b5e20;}
+.hbadge-open{background:#fff3e0;color:#e65100;}
+.hbadge-progress{background:#e3f2fd;color:#1565c0;}
+.hist-entry-info{font-size:12px;color:#444;}
+.hist-export-bar{padding:12px 14px;background:white;border-top:1px solid #eee;flex-shrink:0;display:flex;gap:8px;}
+.hist-export-btn{flex:1;padding:11px;border:none;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;}
+.hexp-all{background:linear-gradient(135deg,#1a237e,#3949ab);color:white;}
+.hexp-tab{background:#e8eaf6;color:#1a237e;}
+.hist-empty{text-align:center;color:#aaa;font-size:12px;padding:24px;font-style:italic;}
+.hist-stats-row{display:flex;gap:8px;margin-bottom:10px;}
+.hstat{flex:1;background:white;border-radius:8px;padding:8px;text-align:center;}
+.hstat .hval{font-size:18px;font-weight:800;color:#1a237e;}
+.hstat .hlbl{font-size:9px;color:#999;text-transform:uppercase;}
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<div id="home" class="screen active">
+  <div class="home-card">
+    <div class="home-logo">🏭</div>
+    <div class="home-title">MUHLBAUER CT 12/88 L</div>
+    <div class="home-subtitle">Système de gestion de production</div>
+    <div class="week-badge" id="home-week-badge">⏳ Calcul KW...</div>
+    <div class="role-btns">
+      <button class="role-btn operator" onclick="selectRole('operator')"><span class="icon">👷</span>Opérateur</button>
+      <button class="role-btn tech" onclick="selectRole('tech')"><span class="icon">🔧</span>Technicien</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div id="login" class="screen">
+  <div class="login-card">
+    <span id="login-badge" class="login-role-badge"></span>
+    <h2 id="login-title">Connexion</h2>
+    <p>Entrez votre matricule pour accéder</p>
+    <div class="form-group">
+      <label>MATRICULE</label>
+      <input type="text" id="matricule-input" placeholder="ex: 12345" oninput="clearLoginError()" onkeydown="if(event.key==='Enter')doLogin()" maxlength="10">
+    </div>
+    <div class="login-error" id="login-error">❌ Matricule non reconnu.</div>
+    <button class="btn-primary" onclick="doLogin()">Se connecter</button>
+    <button class="btn-back" onclick="showScreen('home')">← Retour</button>
+  </div>
+</div>
+
+<!-- OPERATOR DASHBOARD -->
+<div id="op-dashboard" class="screen">
+  <div class="topbar">
+    <div><div class="topbar-title">👷 Espace Opérateur</div><div class="topbar-user" id="op-user-display"></div></div>
+    <div class="topbar-right"><div class="week-chip" id="op-week-chip"></div><button class="topbar-logout" onclick="logout()">Déconnecter</button></div>
+  </div>
+  <div class="dashboard-body">
+    <div class="dashboard-title">Bienvenue 👋</div>
+    <div class="dashboard-sub">Sélectionnez une section</div>
+    <div class="menu-grid">
+      <div class="menu-card" onclick="showScreen('checklist-niv0-qr')"><div class="icon">✅</div><h3>Checklist Démarrage</h3><p>NIV 0 pré-shift</p></div>
+      <div class="menu-card" onclick="showScreen('passation')"><div class="icon">🔄</div><h3>Passation</h3><p>Transfert de poste</p></div>
+      <div class="menu-card" onclick="showScreen('fiche-suivi')"><div class="icon">📊</div><h3>Fiche de Suivi</h3><p>Lancement & suivi OF</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- TECH DASHBOARD -->
+<div id="tech-dashboard" class="screen">
+  <div class="topbar tech-bar">
+    <div><div class="topbar-title">🔧 Espace Technicien</div><div class="topbar-user" id="tech-user-display"></div></div>
+    <div class="topbar-right"><div class="week-chip" id="tech-week-chip"></div><button class="topbar-logout" onclick="logout()">Déconnecter</button></div>
+  </div>
+  <div class="dashboard-body">
+    <div class="dashboard-title">Bienvenue 👋</div>
+    <div class="dashboard-sub">Sélectionnez une section</div>
+    <div class="menu-grid">
+      <div class="menu-card" onclick="showScreen('maint-checklist')"><div class="icon">🔩</div><h3>Checklist Maintenance</h3><p>Niveau 1 autonome</p></div>
+      <div class="menu-card" onclick="showScreen('action-corrective')"><div class="icon">⚠️</div><h3>Action Corrective</h3><p>Déclaration d'anomalie</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- CHECKLIST NIV0 CLASSIQUE -->
+<!-- CHECKLIST NIV0 QR CODE -->
+<div id="checklist-niv0-qr" class="screen">
+  <div class="page-header"><button class="btn-nav" onclick="goBack()">←</button><h2>✅ Checklist Démarrage NIV0</h2></div>
+  <div class="page-content" id="niv0-qr-content"></div>
+</div>
+
+<!-- PASSATION -->
+<div id="passation" class="screen">
+  <div class="page-header"><button class="btn-nav" onclick="goBack()">←</button><h2>Fiche de Passation</h2></div>
+  <div class="page-content">
+    <div class="passation-grid">
+      <div class="passation-col">
+        <div class="passation-col-header">DÉPART</div>
+        <div class="passation-item"><span>Produit final en place</span><div class="mini-checks"><button class="mini-btn ok" onclick="toggleMini(this,'ok')">OK</button><button class="mini-btn nok" onclick="toggleMini(this,'nok')">NOK</button></div></div>
+        <div class="passation-item"><span>Outils en place</span><div class="mini-checks"><button class="mini-btn ok" onclick="toggleMini(this,'ok')">OK</button><button class="mini-btn nok" onclick="toggleMini(this,'nok')">NOK</button></div></div>
+        <div class="passation-item"><span>Poste organisé</span><div class="mini-checks"><button class="mini-btn ok" onclick="toggleMini(this,'ok')">OK</button><button class="mini-btn nok" onclick="toggleMini(this,'nok')">NOK</button></div></div>
+        <div class="passation-item"><span>Pas de déchets au sol</span><div class="mini-checks"><button class="mini-btn ok" onclick="toggleMini(this,'ok')">OK</button><button class="mini-btn nok" onclick="toggleMini(this,'nok')">NOK</button></div></div>
+      </div>
+      <div class="passation-col">
+        <div class="passation-col-header">ARRIVÉE</div>
+        <div class="passation-item"><span>Boîtes rouges présentes</span><div class="mini-checks"><button class="mini-btn ok" onclick="toggleMini(this,'ok')">OK</button><button class="mini-btn nok" onclick="toggleMini(this,'nok')">NOK</button></div></div>
+        <div class="passation-item"><span>MP en place</span><div class="mini-checks"><button class="mini-btn ok" onclick="toggleMini(this,'ok')">OK</button><button class="mini-btn nok" onclick="toggleMini(this,'nok')">NOK</button></div></div>
+        <div class="passation-item"><span>Article nettoyé et bien placé</span><div class="mini-checks"><button class="mini-btn ok" onclick="toggleMini(this,'ok')">OK</button><button class="mini-btn nok" onclick="toggleMini(this,'nok')">NOK</button></div></div>
+      </div>
+    </div>
+    <div class="passation-questions">
+      <h4>Questions OUI / NON</h4>
+      <div class="question-row">
+        <span class="question-label">Machine en panne ?</span>
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+          <input class="question-input" placeholder="N°" style="width:70px">
+          <div class="yesno-btns"><button class="yesno-btn yes" onclick="toggleYesNo(this,'yes')">OUI</button><button class="yesno-btn no" onclick="toggleYesNo(this,'no')">NON</button></div>
+        </div>
+      </div>
+      <div class="question-row">
+        <span class="question-label">Changement incomplet ?</span>
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+          <span style="font-size:10px;color:#888;">DE: <input class="question-input" style="width:60px"> À: <input class="question-input" style="width:55px"></span>
+          <div class="yesno-btns"><button class="yesno-btn yes" onclick="toggleYesNo(this,'yes')">OUI</button><button class="yesno-btn no" onclick="toggleYesNo(this,'no')">NON</button></div>
+        </div>
+      </div>
+      <div class="question-row">
+        <span class="question-label">Demande incomplète ?</span>
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+          <span style="font-size:10px;color:#888;">REF: <input class="question-input" style="width:58px"> Reste: <input class="question-input" style="width:52px"></span>
+          <div class="yesno-btns"><button class="yesno-btn yes" onclick="toggleYesNo(this,'yes')">OUI</button><button class="yesno-btn no" onclick="toggleYesNo(this,'no')">NON</button></div>
+        </div>
+      </div>
+    </div>
+    <div class="passation-questions" style="margin-top:12px;"><h4>Observations Complémentaires</h4><textarea class="obs-box" placeholder="Saisissez vos observations..."></textarea></div>
+    <div class="passation-questions" style="margin-top:12px;" id="chef-signature-box">
+      <h4>🔐 Validation Chef</h4>
+      <div id="signature-status" style="display:none;padding:10px;border-radius:8px;text-align:center;font-weight:bold;margin-bottom:8px;"></div>
+      <div id="pin-panel">
+        <p style="font-size:12px;color:#888;margin-bottom:10px;">Entrez le code PIN du chef pour valider la passation</p>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          <input id="chef-pin-input" type="password" maxlength="6" placeholder="Code PIN (6 chiffres)" style="flex:1;padding:10px;border:2px solid #ddd;border-radius:8px;font-size:16px;letter-spacing:4px;text-align:center;" oninput="resetPinStatus()">
+          <button class="btn-save" style="margin:0;padding:10px 16px;font-size:13px;" onclick="validerPIN()">✅ Valider</button>
+        </div>
+      </div>
+    </div>
+    <button class="btn-save" id="btn-enregistrer" onclick="enregistrerPassation()">💾 Enregistrer la passation</button>
+  </div>
+</div>
+
+<!-- FICHE DE SUIVI -->
+<div id="fiche-suivi" class="screen">
+  <div class="page-header"><button class="btn-nav" onclick="goBack()">←</button><h2>Fiche de Suivi Production</h2></div>
+  <div class="page-content">
+    <div class="week-info-bar">
+      <div><div class="wlabel">KW</div><div class="wvalue" id="suivi-week-display">—</div></div>
+      <div style="text-align:right;"><div style="font-size:11px;opacity:.7;" id="suivi-date-range"></div><div style="font-size:11px;opacity:.7;" id="suivi-year"></div></div>
+    </div>
+    <div class="of-launch">
+      <h4>🚀 Lancer un nouvel OF</h4>
+      <div class="of-form">
+        <div class="of-field"><label>N° OF</label><input id="of-num" placeholder="ex: OF-001"></div>
+        <div class="of-field"><label>Référence</label><input id="of-ref" placeholder="ex: REF-XYZ"></div>
+        <div class="of-field"><label>Date</label><input id="of-date" type="date"></div>
+        <div class="of-field"><label>Heure début</label><input id="of-heure" type="time"></div>
+        <div class="of-field"><label>Machine</label><select id="of-machine"><option value="">-- Sélectionner --</option><option value="Machine 1">Machine 1</option><option value="Machine 2">Machine 2</option><option value="Machine 3">Machine 3</option><option value="Machine 4">Machine 4</option></select></div>
+        <div class="of-field" style="grid-column:1/-1"><label>Quantité à produire</label><input id="of-qty-target" type="number" placeholder="Objectif total" min="1"></div>
+      </div>
+      <button class="btn-add" onclick="launchOF()">🚀 Lancer l'OF</button>
+    </div>
+    <div class="of-board">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+        <h4 style="font-size:13px;font-weight:700;color:#1a237e;margin:0;">📋 OFs en cours — KW <span id="board-week-num"></span></h4>
+        <button onclick="exportExcel()" style="background:linear-gradient(135deg,#1a6e2e,#27ae60);color:white;border:none;border-radius:8px;padding:7px 12px;font-size:11px;font-weight:700;cursor:pointer;">📥 Excel</button>
+      </div>
+      <div id="of-board-content"><div style="text-align:center;color:#aaa;font-style:italic;padding:20px;background:white;border-radius:12px;">Aucun OF lancé cette semaine</div></div>
+    </div>
+    <div class="hist-card">
+      <div class="hist-card-header"><h4>🗂️ Historique par KW</h4><button onclick="exportAllWeeks()" style="background:linear-gradient(135deg,#b85c00,#e67e22);color:white;border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer;">📦 Tout exporter</button></div>
+      <div id="weeks-list" style="padding:10px 14px;"><div style="font-size:12px;color:#aaa;font-style:italic;text-align:center;padding:8px;">Aucune semaine enregistrée</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- MAINTENANCE CHECKLIST -->
+<div id="maint-checklist" class="screen">
+  <div class="page-header tech-hdr"><button class="btn-nav" onclick="goBack()">←</button><h2>Checklist Maintenance Niveau 1</h2></div>
+  <div class="page-content" id="maint-content"></div>
+</div>
+
+<!-- ACTION CORRECTIVE -->
+<div id="action-corrective" class="screen">
+  <div class="page-header tech-hdr"><button class="btn-nav" onclick="goBack()">←</button><h2>Déclaration d'Action Corrective</h2></div>
+  <div class="page-content">
+    <div class="action-form">
+      <h4>⚠️ Formulaire de déclaration</h4>
+      <div class="form-row"><label>Date & Heure</label><input type="datetime-local" id="ac-date"></div>
+      <div class="form-row"><label>Technicien (Matricule)</label><input type="text" id="ac-tech" placeholder="ex: 12345"></div>
+      <div class="form-row"><label>Zone / Équipement</label><input type="text" id="ac-zone" placeholder="ex: Poinçon, Guidage..."></div>
+      <div class="form-row"><label>Description du problème</label><textarea id="ac-desc" placeholder="Anomalie constatée..."></textarea></div>
+      <div class="form-row"><label>Cause probable</label><textarea id="ac-cause" placeholder="Cause identifiée..."></textarea></div>
+      <div class="form-row"><label>Action réalisée</label><textarea id="ac-action" placeholder="Corrections effectuées..."></textarea></div>
+      <div class="form-row"><label>Gravité</label>
+        <div class="severity-btns">
+          <button class="sev-btn low" onclick="setSeverity('low',this)">🟢 Faible</button>
+          <button class="sev-btn med" onclick="setSeverity('med',this)">🟡 Moyenne</button>
+          <button class="sev-btn high" onclick="setSeverity('high',this)">🔴 Critique</button>
+        </div>
+      </div>
+      <div class="form-row"><label>Statut</label><select id="ac-status"><option value="open">Ouvert</option><option value="progress">En cours</option><option value="closed">Résolu</option></select></div>
+      <button class="btn-submit" onclick="submitAction()">📤 Soumettre</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL SAISIE QUANTITE -->
+<div class="qty-modal" id="qty-modal">
+  <div class="qty-modal-card">
+    <h3>➕ Ajouter production</h3>
+    <p id="qty-modal-of-label"></p>
+    <input type="number" id="qty-modal-input" placeholder="Quantité produite" min="1">
+    <div style="font-size:12px;color:#888;margin-bottom:14px;">Opérateur: <b id="qty-modal-oper"></b></div>
+    <div class="qty-modal-btns"><button class="cancel" onclick="closeQtyModal()">Annuler</button><button class="confirm" onclick="confirmQty()">Confirmer</button></div>
+  </div>
+</div>
+
+<!-- QR SCANNER MODAL -->
+<div class="qr-scanner-modal" id="qr-scanner-modal" style="display:none;">
+  <div class="qr-scanner-card">
+    <h3>📷 Scanner QR Code Checklist</h3>
+    <p id="qr-next-item-label">Scannez le QR code OK ou NOK de chaque poste</p>
+    <div class="qr-video-wrap" id="qr-video-wrap">
+      <video id="qr-video" autoplay playsinline muted></video>
+      <div class="qr-corner tl"></div><div class="qr-corner tr"></div>
+      <div class="qr-corner bl"></div><div class="qr-corner br"></div>
+      <div class="qr-scan-line"></div>
+    </div>
+    <div class="qr-manual-input">
+      <input type="text" id="qr-manual-input" placeholder="Code manuel: ex NIV0-C1-OK">
+      <button onclick="processManualQR()">OK</button>
+    </div>
+    <div class="qr-last-scan" id="qr-last-scan">📱 En attente de scan...</div>
+    <div class="qr-progress-wrap">
+      <div class="qr-progress-title">Progression</div>
+      <div class="qr-progress-bar-bg"><div class="qr-progress-bar-fill" id="qr-progress-fill" style="width:0%"></div></div>
+      <div class="qr-progress-text" id="qr-progress-text">0 / 0 items scannés</div>
+    </div>
+    <button class="qr-report-btn" id="qr-generate-report-btn" style="display:none;" onclick="closeQRScanner();generateQRReport();">📋 Terminer & Générer Rapport</button>
+    <button class="qr-close-btn" onclick="closeQRScanner()" style="width:100%;margin-top:6px;">✕ Fermer</button>
+  </div>
+</div>
+
+<!-- RAPPORT QR MODAL -->
+<div class="qr-report-modal" id="qr-report-modal">
+  <div class="qr-report-card">
+    <h2>📋 Rapport Checklist NIV0</h2>
+    <div class="meta" id="qr-report-meta"></div>
+    <div id="qr-report-summary" class="report-summary-bar"></div>
+    <div id="qr-report-body"></div>
+    <div style="display:flex;gap:8px;margin-top:12px;">
+      <button onclick="exportQRReport()" style="flex:1;background:#1a6e2e;color:white;border:none;border-radius:10px;padding:12px;font-size:13px;font-weight:700;cursor:pointer;">📥 Exporter CSV</button>
+      <button onclick="closeQRReport()" style="flex:1;background:#f0f0f0;color:#333;border:none;border-radius:10px;padding:12px;font-size:13px;font-weight:700;cursor:pointer;">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<!-- QR CODES REFERENCE MODAL -->
+<div id="qr-ref-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:9997;overflow-y:auto;padding:20px;">
+  <div style="background:white;border-radius:16px;padding:20px;max-width:600px;margin:0 auto;">
+    <h3 style="color:#1a237e;margin-bottom:4px;">📋 QR Codes de référence</h3>
+    <p style="font-size:12px;color:#999;margin-bottom:12px;">Imprimez ces codes et collez-les sur les postes correspondants</p>
+    <div id="qr-ref-grid"></div>
+    <div style="display:flex;gap:8px;margin-top:12px;">
+      <button onclick="window.print()" style="flex:1;background:#1a237e;color:white;border:none;border-radius:10px;padding:12px;font-weight:700;cursor:pointer;">🖨️ Imprimer</button>
+      <button onclick="document.getElementById('qr-ref-modal').style.display='none'" style="flex:1;background:#f0f0f0;color:#333;border:none;border-radius:10px;padding:12px;font-weight:700;cursor:pointer;">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<div class="success-toast" id="toast"></div>
+
+
+<!-- ===== HISTORIQUE GLOBAL FAB ===== -->
+<button class="hist-fab" id="hist-fab" onclick="openHistModal()" style="display:none;">
+  📂 Historique
+</button>
+
+<!-- ===== HISTORIQUE MODAL ===== -->
+<div class="hist-modal" id="hist-modal">
+  <div class="hist-panel">
+    <div class="hist-panel-header">
+      <h3>📂 Historique complet</h3>
+      <button class="hist-close" onclick="closeHistModal()">✕ Fermer</button>
+    </div>
+    <div class="hist-tabs">
+      <button class="hist-tab active" onclick="switchHistTab('checklist',this)">✅ Checklist</button>
+      <button class="hist-tab" onclick="switchHistTab('passation',this)">🔄 Passation</button>
+      <button class="hist-tab" onclick="switchHistTab('suivi',this)">📊 Suivi OF</button>
+      <button class="hist-tab" onclick="switchHistTab('maintenance',this)">🔩 Maint.</button>
+      <button class="hist-tab" onclick="switchHistTab('actions',this)">⚠️ Actions</button>
+    </div>
+    <div class="hist-body" id="hist-body">
+      <div class="hist-empty">Sélectionnez un onglet</div>
+    </div>
+    <div class="hist-export-bar">
+      <button class="hist-export-btn hexp-tab" onclick="exportHistTab()">📥 Exporter onglet</button>
+      <button class="hist-export-btn hexp-all" onclick="exportHistAll()">📦 Tout exporter</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+const niv0Images={};const maintImages={};
+// ===== SÉCURITÉ : credentials hashés SHA-256 =====
+// Les matricules réels ne sont JAMAIS stockés en clair dans le code
+const APP_SALT='MUHLBAUER_CT12_2026';
+async function sha256(str){
+  const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+// Clés = SHA256(SALT + matricule) — impossible de retrouver le matricule depuis le hash
+const MATRICULES_DB={
+  "630edb0e3ff7c0434a06ac1b0883c0616df7867b0a753433423a9fb52c1bbae0":{nom:"Ali Ben Salah",role:"operator"},
+  "80051d4cdba21994e34551ca6e1c6c6b7e332979786f2371f40a326df94c4649":{nom:"Fatima Trabelsi",role:"operator"},
+  "ffb11a765369699e4cdaac6535bf0a60486876b3b4f7ba9c413adf25f79c6a96":{nom:"Mohamed Gharbi",role:"operator"},
+  "d9ed933b6a28255a2765b2c9eca4b48492ea8643919feddcbe2adba4cfe0bda7":{nom:"Sonia Ammar",role:"operator"},
+  "a876ef3e3f124a69df107cdd48849967ed240b357bb4e319b67d92bfb61b9944":{nom:"Karim Jlassi",role:"operator"},
+  "7b54b6e0455413ad50347e67ddc9090629597b01fcf28dfe1037646ba907cf81":{nom:"Nabil Oueslati",role:"tech"},
+  "229d42c8f3bfcc90d1509635e741145c2d6994379737f777b9add18598f25f22":{nom:"Rania Belhaj",role:"tech"},
+  "fb2f1b165140ab42d20d33b994a9f2ce0df44278478969008c9312e152504dd6":{nom:"Slim Karray",role:"tech"},
+  "fcea49237c68394df86642efce2ba0991532b0916c9da57a113c9470d39b40f5":{nom:"Admin",role:"both"}
+};
+// Hash du PIN chef (SHA256) — le PIN réel n'est jamais dans le code
+const CHEF_PIN_HASH='1b0664944c1f730f3976fdf903581ef3a77547179101ea12561733d55dafee10';
+// Anti-brute-force
+let pinAttempts=0,pinLocked=false,pinLockUntil=0;
+let loginAttempts={},loginLockUntil={};
+
+function getISOWeek(date){const d=new Date(date);d.setHours(0,0,0,0);d.setDate(d.getDate()+4-(d.getDay()||7));const yearStart=new Date(d.getFullYear(),0,1);return Math.ceil((((d-yearStart)/86400000)+1)/7);}
+function getCurrentWeekInfo(){
+  const now=new Date();const wn=getISOWeek(now);const year=now.getFullYear();
+  const day=now.getDay()||7;const monday=new Date(now);monday.setDate(now.getDate()-day+1);
+  const sunday=new Date(monday);sunday.setDate(monday.getDate()+6);
+  const fmt=d=>d.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'});
+  return{wn,year,key:`${year}-S${String(wn).padStart(2,'0')}`,label:`KW ${wn}`,range:`${fmt(monday)} → ${fmt(sunday)}`};
+}
+
+// ===== STORAGE KEYS =====
+const KEYS={checklist:'hist_checklist',passation:'hist_passation',maintenance:'hist_maintenance',actions:'hist_actions',suivi:'prod_allData'};
+
+function loadStore(key){try{return JSON.parse(localStorage.getItem(key)||'[]');}catch(e){return[];}}
+function saveStore(key,data){try{localStorage.setItem(key,JSON.stringify(data));}catch(e){}}
+function loadObj(key){try{return JSON.parse(localStorage.getItem(key)||'{}');}catch(e){return{};}}
+function saveObj(key,data){try{localStorage.setItem(key,JSON.stringify(data));}catch(e){}}
+
+let currentRole='',currentUser='',currentUserNom='',prevScreen='',severity='',allData={},currentWeekKey='',activeOFIdx=null,currentHistTab='checklist';
+
+// ===== QR CHECKLIST STATE =====
+const MACHINES=['Machine 1','Machine 2','Machine 3','Machine 4'];
+const niv0CommonItems=[
+  {id:'C1',text:'Vider Caisses de déchet rouge'},
+  {id:'C2',text:'Vérifier que la matière première est suffisante'},
+  {id:'C3',text:'Vérifier la disponibilité du matériel de travail (Bloc à 6 pans, ciseaux et ruban déchirable)'},
+];
+const niv0MachineItems=[
+  {id:'M1',text:"Tester le bouton d'arrêt d'urgence"},
+  {id:'M2',text:"Inspecter l'activation du système de refroidissement"},
+  {id:'M3',text:'Inspecter le niveau eau refroidissement'},
+  {id:'M4',text:"Monter les flexibles d'air"},
+  {id:'M5',text:"Vérifier l'absence de fuite pneumatique"},
+  {id:'M6',text:'Vérifier que la pression air comprimé : 6 bars'},
+  {id:'M7',text:'Vérifier que les capteurs propres et activés'},
+  {id:'M8',text:'Vider le bac à déchets poinçon'},
+  {id:'M9',text:'Inspecter visuellement les rails de guidage sur toute leur longueur'},
+  {id:'M10',text:'Vérifier que la température de chauffage est conforme à la SOP référence'},
+  {id:'M11',text:'Vérifier que les paramètres machine conformes à la SOP référence'},
+  {id:'M12',text:'Vérifier que la bobine réception (enrouleur) en place'},
+  {id:'M13',text:'Vérifier la vitesse de la bande de sortie'},
+  {id:'M14',text:'Vérifier le fonctionnement de la caméra et du système de contrôle'},
+];
+
+let qrChecklistItems=[],qrResults={},qrScanning=false,qrStream=null,qrAnimFrame=null,qrScanSession=null,qrBarcodeDetector=null;
+
+function buildQRChecklistItems(){
+  const items=[];
+  niv0CommonItems.forEach(item=>{items.push({uid:`NIV0-${item.id}`,qrOK:`NIV0-${item.id}-OK`,qrNOK:`NIV0-${item.id}-NOK`,...item,machineLabel:null});});
+  MACHINES.forEach((machine,mIdx)=>{
+    niv0MachineItems.forEach(item=>{
+      const uid=`NIV0-M${mIdx+1}_${item.id}`;
+      items.push({uid,qrOK:`${uid}-OK`,qrNOK:`${uid}-NOK`,...item,id:`M${mIdx+1}_${item.id}`,machineLabel:machine});
+    });
+  });
+  return items;
+}
+
+window.onload=()=>{
+  const wi=getCurrentWeekInfo();
+  document.getElementById('home-week-badge').textContent=`📅 ${wi.label} — ${wi.range} ${wi.year}`;
+  document.getElementById('ac-date').value=new Date().toISOString().slice(0,16);
+  allData=loadObj(KEYS.suivi);
+  if(window.BarcodeDetector){try{qrBarcodeDetector=new BarcodeDetector({formats:['qr_code']});}catch(e){}}
+};
+
+function showScreen(id){
+  const prev=document.querySelector('.screen.active');
+  if(prev) prevScreen=prev.id;
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+  // Show/hide FAB
+  const fab=document.getElementById('hist-fab');
+  const noFab=['home','login'];
+  fab.style.display=noFab.includes(id)?'none':'flex';
+  if(id==='fiche-suivi') initFicheSuivi();
+  if(id==='maint-checklist') buildMaintChecklist();
+  if(id==='checklist-niv0-qr') buildQRChecklist();
+}
+function goBack(){if(prevScreen)showScreen(prevScreen);}
+function logout(){currentRole='';currentUser='';currentUserNom='';document.getElementById('matricule-input').value='';document.getElementById('hist-fab').style.display='none';showScreen('home');}
+function selectRole(role){
+  currentRole=role;
+  const badge=document.getElementById('login-badge');const title=document.getElementById('login-title');
+  if(role==='operator'){badge.textContent='OPÉRATEUR';badge.className='login-role-badge operator';title.textContent='Connexion Opérateur';}
+  else{badge.textContent='TECHNICIEN';badge.className='login-role-badge tech';title.textContent='Connexion Technicien';}
+  showScreen('login');
+  setTimeout(()=>document.getElementById('matricule-input').focus(),300);
+}
+async function doLogin(){
+  const matRaw=document.getElementById('matricule-input').value.trim();
+  const errEl=document.getElementById('login-error');
+  const btn=document.querySelector('#login .btn-primary');
+  if(!matRaw){errEl.textContent='❌ Saisissez votre matricule.';errEl.style.display='block';return;}
+  // Anti-brute-force: max 5 tentatives puis blocage 2 min
+  const now=Date.now();
+  if(loginLockUntil[matRaw]&&now<loginLockUntil[matRaw]){
+    const reste=Math.ceil((loginLockUntil[matRaw]-now)/1000);
+    errEl.textContent=`🔒 Trop de tentatives. Réessayez dans ${reste}s.`;errEl.style.display='block';return;
+  }
+  if(btn){btn.textContent='⏳ Vérification...';btn.disabled=true;}
+  // Hash le matricule saisi avant de chercher dans la DB
+  const hash=await sha256(APP_SALT+matRaw);
+  const user=MATRICULES_DB[hash];
+  if(btn){btn.textContent='Se connecter';btn.disabled=false;}
+  if(!user){
+    loginAttempts[matRaw]=(loginAttempts[matRaw]||0)+1;
+    if(loginAttempts[matRaw]>=5){loginLockUntil[matRaw]=Date.now()+120000;loginAttempts[matRaw]=0;errEl.textContent='🔒 Compte bloqué 2 minutes après trop de tentatives.';errEl.style.display='block';return;}
+    errEl.textContent=`❌ Matricule non reconnu. (${loginAttempts[matRaw]}/5 tentatives)`;errEl.style.display='block';return;
+  }
+  if(user.role!==currentRole&&user.role!=='both'){
+    errEl.textContent="❌ Ce matricule n'est pas autorisé pour ce rôle.";errEl.style.display='block';return;
+  }
+  loginAttempts[matRaw]=0;
+  currentUser=matRaw;currentUserNom=user.nom;
+  const wi=getCurrentWeekInfo();
+  if(currentRole==='operator'){
+    document.getElementById('op-user-display').textContent=`${user.nom} — ${matRaw}`;
+    document.getElementById('op-week-chip').textContent=wi.label;
+    showScreen('op-dashboard');
+  }else{
+    document.getElementById('tech-user-display').textContent=`${user.nom} — ${matRaw}`;
+    document.getElementById('tech-week-chip').textContent=wi.label;
+    showScreen('tech-dashboard');
+  }
+}
+function clearLoginError(){document.getElementById('login-error').style.display='none';}
+
+// ===== CHECKLIST QR =====
+function buildQRChecklist(){
+  qrChecklistItems=buildQRChecklistItems();
+  qrResults={};
+  qrChecklistItems.forEach(item=>{qrResults[item.uid]='pending';});
+  qrScanSession={date:new Date().toISOString().split('T')[0],shift:'Matin',operateur:`${currentUserNom} (${currentUser})`,startTime:new Date().toLocaleString('fr-FR')};
+  const today=new Date().toISOString().split('T')[0];const wi=getCurrentWeekInfo();
+  let html=`<div class="checklist-header">
+    <h3>✅ CHECKLIST PRÉ-DÉMARRAGE · MUHLBAUER CT 12/88 L</h3>
+    <p style="font-size:11px;color:#999;margin-bottom:10px;">Mode scanner automatique · ${wi.label} ${wi.year}</p>
+    <div class="header-fields">
+      <div class="field-group"><label>Date</label><input type="date" value="${today}" id="qr-session-date" onchange="qrScanSession.date=this.value"></div>
+      <div class="field-group"><label>Shift</label><select id="qr-session-shift" onchange="qrScanSession.shift=this.value"><option>Matin</option><option>Après-midi</option><option>Nuit</option></select></div>
+      <div class="field-group" style="grid-column:1/-1"><label>Opérateur</label><input type="text" value="${currentUserNom} (${currentUser})" readonly></div>
+    </div>
+  </div>
+  <div style="background:#e3f2fd;border-radius:12px;padding:12px 14px;margin-bottom:12px;font-size:12px;color:#1565c0;">
+    <b>📌 Mode QR Code :</b> Scannez les QR codes OK ou NOK de chaque poste — passation <b>automatique</b> sans clic !
+  </div>
+  <div style="display:flex;gap:8px;margin-bottom:12px;">
+    <button class="qr-mode-toggle" style="flex:1;" onclick="openQRScanner()">📷 Démarrer le Scanner</button>
+    <button onclick="showQRCodes()" style="flex:0 0 auto;background:#e8eaf6;color:#1a237e;border:none;border-radius:10px;padding:11px 14px;font-size:12px;font-weight:700;cursor:pointer;">🖨️ Voir QR Codes</button>
+  </div>
+  <div id="qr-overall-progress" style="background:white;border-radius:12px;padding:12px 14px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07);">
+    <div style="font-size:12px;font-weight:700;color:#1a237e;margin-bottom:6px;">Progression globale</div>
+    <div style="height:10px;background:#e0e0e0;border-radius:5px;overflow:hidden;margin-bottom:4px;"><div id="overall-bar" style="height:100%;width:0%;background:linear-gradient(90deg,#1a9e52,#2e7d32);border-radius:5px;transition:width .4s;"></div></div>
+    <div id="overall-text" style="font-size:11px;color:#888;">0 / ${qrChecklistItems.length} items scannés</div>
+  </div>`;
+  html+=`<div class="section-title">🌐 ZONE COMMUNE (toutes machines)</div>`;
+  niv0CommonItems.forEach(item=>{html+=buildQRItemHTML(`NIV0-${item.id}`,item.text,null);});
+  MACHINES.forEach((machine,mIdx)=>{
+    const colors=['#37474f','#1a237e','#4a148c','#b71c1c'];
+    html+=`<div class="section-title" style="background:${colors[mIdx]};">🔧 ${machine}</div>`;
+    niv0MachineItems.forEach(item=>{html+=buildQRItemHTML(`NIV0-M${mIdx+1}_${item.id}`,item.text,machine);});
+  });
+  html+=`<button class="btn-save" onclick="generateQRReport()" style="margin-top:12px;background:linear-gradient(135deg,#283593,#3949ab);">📋 Générer Rapport Final</button>`;
+  document.getElementById('niv0-qr-content').innerHTML=html;
+}
+
+function buildQRItemHTML(uid,text,machine){
+  return `<div class="checklist-item" id="qr-item-${uid}" style="transition:background .3s,border-left .3s;">
+    <div style="width:48px;height:40px;background:#e8eaf6;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:20px;">📷</div>
+    <span class="item-text" style="font-size:12px;">${text}</span>
+    <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end;flex-shrink:0;">
+      <span class="item-qr-status pending" id="qr-status-${uid}">—</span>
+      <div style="display:flex;gap:4px;">
+        <button style="padding:4px 8px;border-radius:6px;border:1.5px solid #2e7d32;background:white;color:#2e7d32;font-size:10px;font-weight:700;cursor:pointer;" onclick="setQRResult('${uid}','OK')">✓ OK</button>
+        <button style="padding:4px 8px;border-radius:6px;border:1.5px solid #c62828;background:white;color:#c62828;font-size:10px;font-weight:700;cursor:pointer;" onclick="setQRResult('${uid}','NOK')">✗ NOK</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function setQRResult(uid,result){
+  qrResults[uid]=result;
+  const badge=document.getElementById('qr-status-'+uid);const row=document.getElementById('qr-item-'+uid);
+  if(badge){badge.textContent=result;badge.className='item-qr-status '+(result==='OK'?'ok':'nok');}
+  if(row){row.style.background=result==='OK'?'#e8f5e9':'#ffebee';row.style.borderLeft=result==='OK'?'4px solid #2e7d32':'4px solid #c62828';row.style.paddingLeft='10px';}
+  updateOverallProgress();
+  showToast(result==='OK'?`✅ ${uid.replace('NIV0-','')} : OK`:`❌ ${uid.replace('NIV0-','')} : NOK`);
+}
+function updateOverallProgress(){
+  const total=qrChecklistItems.length;
+  const done=Object.values(qrResults).filter(v=>v!=='pending').length;
+  const pct=Math.round((done/total)*100);
+  const bar=document.getElementById('overall-bar');const txt=document.getElementById('overall-text');
+  if(bar) bar.style.width=pct+'%';
+  if(txt) txt.textContent=`${done} / ${total} items scannés (${pct}%)`;
+  const fill=document.getElementById('qr-progress-fill');const ptxt=document.getElementById('qr-progress-text');
+  if(fill) fill.style.width=pct+'%';
+  if(ptxt) ptxt.textContent=`${done} / ${total} items scannés (${pct}%)`;
+  const repBtn=document.getElementById('qr-generate-report-btn');
+  if(repBtn) repBtn.style.display=done===total?'block':'none';
+}
+
+async function openQRScanner(){
+  document.getElementById('qr-scanner-modal').style.display='flex';
+  qrScanning=true;updateOverallProgress();await startCamera();
+}
+async function startCamera(){
+  const lastScan=document.getElementById('qr-last-scan');
+  try{
+    qrStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});
+    const video=document.getElementById('qr-video');video.srcObject=qrStream;await video.play();
+    if(qrBarcodeDetector){lastScan.textContent='📷 Caméra active — approchez le QR code';scanLoop();}
+    else{lastScan.textContent='📷 Caméra active — utilisez la saisie manuelle';scanLoopJsQR();}
+  }catch(e){lastScan.textContent='📱 Caméra non disponible — utilisez la saisie manuelle ci-dessus';lastScan.style.color='#ffab00';}
+}
+async function scanLoop(){
+  if(!qrScanning) return;
+  const video=document.getElementById('qr-video');
+  if(video.readyState>=2&&qrBarcodeDetector){
+    try{const codes=await qrBarcodeDetector.detect(video);if(codes&&codes.length>0){processQRCode(codes[0].rawValue);await new Promise(r=>setTimeout(r,1500));}}catch(e){}
+  }
+  if(qrScanning) setTimeout(scanLoop,200);
+}
+function scanLoopJsQR(){
+  if(!qrScanning) return;
+  const video=document.getElementById('qr-video');
+  if(video.readyState>=2&&window.jsQR){
+    const canvas=document.createElement('canvas');canvas.width=video.videoWidth||300;canvas.height=video.videoHeight||300;
+    const ctx=canvas.getContext('2d');ctx.drawImage(video,0,0);
+    const imgData=ctx.getImageData(0,0,canvas.width,canvas.height);
+    const code=jsQR(imgData.data,imgData.width,imgData.height);
+    if(code) processQRCode(code.data);
+  }
+  if(qrScanning) qrAnimFrame=requestAnimationFrame(scanLoopJsQR);
+}
+function processQRCode(code){
+  const label=document.getElementById('qr-last-scan');
+  const match=code.match(/^(NIV0-[A-Z0-9_]+)-(OK|NOK)$/i);
+  if(match){
+    const uid=match[1].toUpperCase();const result=match[2].toUpperCase();
+    if(qrResults[uid]==='pending'){
+      setQRResult(uid,result);label.textContent=`✅ Scanné : ${uid.replace('NIV0-','')} → ${result}`;label.style.color='#00e676';
+      if(navigator.vibrate) navigator.vibrate([80,30,80]);
+    }else if(qrResults[uid]!==undefined){label.textContent=`⚠️ Déjà scanné : ${uid.replace('NIV0-','')} (${qrResults[uid]})`;label.style.color='#ffab00';}
+    else{label.textContent=`❓ Code inconnu : ${uid}`;label.style.color='#ff5252';}
+  }else{label.textContent=`❌ Format invalide : ${code.slice(0,30)}`;label.style.color='#ff5252';}
+}
+function processManualQR(){const inp=document.getElementById('qr-manual-input');if(inp.value.trim()){processQRCode(inp.value.trim());inp.value='';}}
+function closeQRScanner(){
+  qrScanning=false;if(qrAnimFrame) cancelAnimationFrame(qrAnimFrame);
+  if(qrStream) qrStream.getTracks().forEach(t=>t.stop());qrStream=null;
+  document.getElementById('qr-scanner-modal').style.display='none';
+}
+function showQRCodes(){
+  const modal=document.getElementById('qr-ref-modal');modal.style.display='block';
+  const grid=document.getElementById('qr-ref-grid');
+  let allEntries=[];
+  niv0CommonItems.forEach(item=>{allEntries.push({uid:`NIV0-${item.id}`,label:`COMMUNE — ${item.text.slice(0,35)}`});});
+  MACHINES.forEach((machine,mIdx)=>{niv0MachineItems.forEach(item=>{allEntries.push({uid:`NIV0-M${mIdx+1}_${item.id}`,label:`${machine} — ${item.text.slice(0,30)}`});});});
+  let html='<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">';
+  allEntries.forEach(e=>{
+    const safeId=e.uid.replace(/[^a-z0-9]/gi,'_');
+    html+=`<div style="border:1px solid #e0e0e0;border-radius:8px;padding:8px;text-align:center;">
+      <div style="font-size:9px;font-weight:700;color:#1a237e;margin-bottom:4px;">${e.label}</div>
+      <div style="display:flex;gap:4px;justify-content:center;">
+        <div><div style="font-size:9px;color:#2e7d32;font-weight:700;">✓ OK</div><div id="qr-ok-${safeId}" style="border:2px solid #2e7d32;border-radius:4px;padding:2px;display:inline-block;"></div><div style="font-size:7px;color:#666;">${e.uid}-OK</div></div>
+        <div><div style="font-size:9px;color:#c62828;font-weight:700;">✗ NOK</div><div id="qr-nok-${safeId}" style="border:2px solid #c62828;border-radius:4px;padding:2px;display:inline-block;"></div><div style="font-size:7px;color:#666;">${e.uid}-NOK</div></div>
+      </div></div>`;
+  });
+  html+='</div>';grid.innerHTML=html;
+  if(window.QRCode){
+    allEntries.forEach(e=>{
+      const safeId=e.uid.replace(/[^a-z0-9]/gi,'_');
+      try{new QRCode(document.getElementById(`qr-ok-${safeId}`),{text:`${e.uid}-OK`,width:56,height:56,colorDark:'#2e7d32',colorLight:'#ffffff'});}catch(err){}
+      try{new QRCode(document.getElementById(`qr-nok-${safeId}`),{text:`${e.uid}-NOK`,width:56,height:56,colorDark:'#c62828',colorLight:'#ffffff'});}catch(err){}
+    });
+  }
+}
+
+// ===== RAPPORT QR + SAVE TO HISTORY =====
+function generateQRReport(){
+  const s=qrScanSession||{date:'—',shift:'—',operateur:'—'};
+  const ok=Object.values(qrResults).filter(v=>v==='OK').length;
+  const nok=Object.values(qrResults).filter(v=>v==='NOK').length;
+  const pending=Object.values(qrResults).filter(v=>v==='pending').length;
+  const total=qrChecklistItems.length;const pct=Math.round((ok/total)*100);
+  // SAVE TO HISTORY
+  const record={id:Date.now(),date:s.date,shift:s.shift,operateur:s.operateur,savedAt:new Date().toISOString(),ok,nok,pending,total,pct,results:{...qrResults}};
+  const hist=loadStore(KEYS.checklist);hist.unshift(record);saveStore(KEYS.checklist,hist);
+  // Display
+  document.getElementById('qr-report-meta').textContent=`📅 ${s.date} · Shift ${s.shift} · 👷 ${s.operateur}`;
+  document.getElementById('qr-report-summary').innerHTML=`
+    <div class="rs-stat rs-total"><div class="val">${total}</div><div class="lbl">Total</div></div>
+    <div class="rs-stat rs-ok"><div class="val">${ok}</div><div class="lbl">OK ✓</div></div>
+    <div class="rs-stat rs-nok"><div class="val">${nok}</div><div class="lbl">NOK ✗</div></div>
+    <div class="rs-stat rs-pending"><div class="val">${pending}</div><div class="lbl">Non scanné</div></div>`;
+  let body=`<div style="background:#f0f4ff;border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:#1a237e;"><b>Taux de conformité : ${pct}%</b>${nok>0?` · ⚠️ ${nok} anomalie(s)`:' · ✅ Tout conforme'}</div>`;
+  body+=`<div class="report-section"><div class="report-section-title">🌐 ZONE COMMUNE</div>`;
+  niv0CommonItems.forEach(item=>{const uid=`NIV0-${item.id}`;const r=qrResults[uid]||'pending';body+=`<div class="report-item"><span class="ri-text">${item.text}</span><span class="ri-badge ${r==='pending'?'pending':r.toLowerCase()}">${r==='pending'?'—':r}</span></div>`;});
+  body+='</div>';
+  MACHINES.forEach((machine,mIdx)=>{
+    body+=`<div class="report-section"><div class="report-section-title">🔧 ${machine}</div>`;
+    niv0MachineItems.forEach(item=>{const uid=`NIV0-M${mIdx+1}_${item.id}`;const r=qrResults[uid]||'pending';body+=`<div class="report-item"><span class="ri-text">${item.text}</span><span class="ri-badge ${r==='pending'?'pending':r.toLowerCase()}">${r==='pending'?'—':r}</span></div>`;});
+    body+='</div>';
+  });
+  document.getElementById('qr-report-body').innerHTML=body;
+  document.getElementById('qr-report-modal').classList.add('open');
+  showToast('Rapport sauvegardé dans l\'historique ✓');
+}
+function closeQRReport(){document.getElementById('qr-report-modal').classList.remove('open');}
+function exportQRReport(){
+  const s=qrScanSession||{date:'—',shift:'—',operateur:'—'};
+  const BOM='\uFEFF';
+  let csv=BOM+`Rapport Checklist NIV0 QR Code;${s.date};Shift ${s.shift}\nOpérateur;${s.operateur}\nExporté le;${new Date().toLocaleString('fr-FR')}\n\nZone;Machine;Item;Résultat;Code QR\n`;
+  niv0CommonItems.forEach(item=>{const uid=`NIV0-${item.id}`;csv+=`COMMUNE;;${item.text};${qrResults[uid]||'—'};${uid}\n`;});
+  MACHINES.forEach((machine,mIdx)=>{niv0MachineItems.forEach(item=>{const uid=`NIV0-M${mIdx+1}_${item.id}`;csv+=`MACHINE;${machine};${item.text};${qrResults[uid]||'—'};${uid}\n`;});});
+  dlCSV(csv,`Checklist_QR_NIV0_${s.date}.csv`);showToast('Rapport exporté ✓');
+}
+
+// ===== MAINTENANCE =====
+const maintItems=[
+  {step:1,zone:'Poinçon',action:"Huiler le poinçon au niveau des points de lubrification.",product:'Ballistol oil 3801 0084 / Vactra 4'},
+  {step:3,zone:'Guidages linéaires horizontaux',action:"Vérifier les faces d'arrêt. Vérifier l'amortisseur de chocs. Huiler les guidages — 2 passages lents.",product:'Ballistol oil 3801 0084 / Vactra 4'},
+  {step:4,zone:'Guidages linéaires verticaux (Préchauffage / Formage)',action:"Huiler les guidages verticaux (même procédure).",product:'Ballistol oil 3801 0084 / Vactra 4'},
+  {step:5,zone:'Chaîne de transmission',action:"Appliquer graisse au pinceau — tourner lentement la chaîne.",product:'Grease AFC 3802 0005'},
+  {step:6,zone:'Paliers support bobine',action:"Graisser les paliers support bobine (dérouleur + enrouleur).",product:'Long-life gr. 3808 0043'},
+];
+let maintState={};
+function buildMaintChecklist(){
+  maintState={};
+  const today=new Date().toISOString().split('T')[0];const wi=getCurrentWeekInfo();
+  let html=`<div class="checklist-header"><h3>🔩 Maintenance Autonome Niveau 1 · MUHLBAUER CT 12/88 L</h3>
+    <p style="font-size:11px;color:#999;margin-bottom:10px;">${wi.label} ${wi.year}</p>
+    <div class="header-fields">
+      <div class="field-group"><label>Date</label><input type="date" value="${today}" id="maint-date"></div>
+      <div class="field-group"><label>Shift</label><select id="maint-shift"><option>Matin</option><option>Après-midi</option><option>Nuit</option></select></div>
+      <div class="field-group"><label>Technicien</label><input type="text" value="${currentUserNom} (${currentUser})" id="maint-tech"></div>
+      <div class="field-group"><label>N° Fiche</label><input type="text" placeholder="ex: F-001" id="maint-fiche"></div>
+    </div></div>`;
+  maintItems.forEach((item,i)=>{
+    html+=`<div class="maint-item" id="maint-item-${i}"><div class="maint-item-header"><div class="step-badge">${item.step}</div><div class="zone-name">${item.zone}</div></div>
+      <div class="maint-body"><div class="maint-action">${item.action}</div><div class="maint-product">🧴 ${item.product}</div>
+        <div class="maint-check-row">
+          <button class="check-btn ok" onclick="toggleMaintCheck(this,'ok',${i})">✓ OK</button>
+          <button class="check-btn nok" onclick="toggleMaintCheck(this,'nok',${i})" style="margin-left:8px">✗ NOK</button>
+        </div>
+      </div></div>`;
+  });
+  html+=`<div class="form-row" style="margin-top:12px;"><label>Observations</label><textarea id="maint-obs" placeholder="Observations, remarques..."></textarea></div>`;
+  html+=`<button class="btn-save" onclick="saveMaintChecklist()" style="margin-top:12px;">💾 Enregistrer & Sauvegarder</button>`;
+  document.getElementById('maint-content').innerHTML=html;
+}
+function toggleMaintCheck(btn,type,idx){
+  const row=document.getElementById(`maint-item-${idx}`);
+  row.querySelector('.check-btn.ok').classList.toggle('active',type==='ok');
+  row.querySelector('.check-btn.nok').classList.toggle('active',type==='nok');
+  maintState[idx]=type;
+}
+function saveMaintChecklist(){
+  const date=document.getElementById('maint-date')?.value||'—';
+  const shift=document.getElementById('maint-shift')?.value||'—';
+  const tech=document.getElementById('maint-tech')?.value||'—';
+  const fiche=document.getElementById('maint-fiche')?.value||'—';
+  const obs=document.getElementById('maint-obs')?.value||'';
+  const results=maintItems.map((item,i)=>({step:item.step,zone:item.zone,result:maintState[i]||'non renseigné'}));
+  const ok=results.filter(r=>r.result==='ok').length;
+  const nok=results.filter(r=>r.result==='nok').length;
+  const record={id:Date.now(),date,shift,technicien:tech,fiche,obs,ok,nok,total:maintItems.length,results,savedAt:new Date().toISOString()};
+  const hist=loadStore(KEYS.maintenance);hist.unshift(record);saveStore(KEYS.maintenance,hist);
+  showToast('Checklist maintenance sauvegardée ✓');
+}
+
+// ===== PASSATION =====
+let passationValidee=false;
+function resetPinStatus(){if(!pinLocked){document.getElementById('signature-status').style.display='none';document.getElementById('chef-pin-input').style.borderColor='#ddd';}}
+async function validerPIN(){
+  const input=document.getElementById('chef-pin-input');const status=document.getElementById('signature-status');const btnEnregistrer=document.getElementById('btn-enregistrer');
+  // Check lockout
+  if(pinLocked&&Date.now()<pinLockUntil){const reste=Math.ceil((pinLockUntil-Date.now())/1000);status.style.display='block';status.style.background='#fee2e2';status.style.color='#dc2626';status.textContent=`🔒 Bloqué ${reste}s après trop de tentatives.`;return;}
+  if(pinLocked&&Date.now()>=pinLockUntil){pinLocked=false;pinAttempts=0;}
+  // Validate all items first
+  const items=document.querySelectorAll('#passation .passation-item');
+  for(let item of items){if(!item.querySelector('.mini-btn.ok.active')&&!item.querySelector('.mini-btn.nok.active')){status.style.display='block';status.style.background='#fff3cd';status.style.color='#b45309';status.textContent='⚠️ Cochez OK ou NOK pour tous les points !';item.style.background='#fee2e2';item.scrollIntoView({behavior:'smooth',block:'center'});return;}}
+  const questions=document.querySelectorAll('#passation .question-row');
+  for(let q of questions){if(!q.querySelector('.yesno-btn.yes.active')&&!q.querySelector('.yesno-btn.no.active')){status.style.display='block';status.style.background='#fff3cd';status.style.color='#b45309';status.textContent='⚠️ Répondez à toutes les questions OUI/NON !';q.style.background='#fee2e2';q.scrollIntoView({behavior:'smooth',block:'center'});return;}}
+  // Hash the entered PIN and compare
+  const enteredHash=await sha256(APP_SALT+input.value);
+  if(enteredHash===CHEF_PIN_HASH){
+    pinAttempts=0;passationValidee=true;
+    status.style.display='block';status.style.background='#dcfce7';status.style.color='#16a34a';
+    status.textContent='✅ Chef validé — '+new Date().toLocaleString('fr-FR');
+    input.style.borderColor='#16a34a';input.disabled=true;
+    btnEnregistrer.style.opacity='1';btnEnregistrer.style.background='#16a34a';
+  }else{
+    pinAttempts++;
+    passationValidee=false;
+    if(pinAttempts>=3){pinLocked=true;pinLockUntil=Date.now()+120000;pinAttempts=0;status.style.display='block';status.style.background='#fee2e2';status.style.color='#dc2626';status.textContent='🔒 Bloqué 2 min après 3 tentatives incorrectes.';input.value='';return;}
+    status.style.display='block';status.style.background='#fee2e2';status.style.color='#dc2626';
+    status.textContent=`❌ Code incorrect (${pinAttempts}/3 tentatives)`;input.style.borderColor='#dc2626';input.value='';
+  }
+}
+function enregistrerPassation(){
+  if(!passationValidee){alert('⚠️ Validation du chef requise !');return;}
+  // Collect passation data
+  const checkItems=[];
+  document.querySelectorAll('#passation .passation-item').forEach(item=>{
+    checkItems.push({label:item.querySelector('span').textContent,result:item.querySelector('.mini-btn.ok.active')?'OK':item.querySelector('.mini-btn.nok.active')?'NOK':'—'});
+  });
+  const questions=[];
+  document.querySelectorAll('#passation .question-row').forEach(q=>{
+    questions.push({label:q.querySelector('.question-label').textContent,result:q.querySelector('.yesno-btn.yes.active')?'OUI':q.querySelector('.yesno-btn.no.active')?'NON':'—'});
+  });
+  const obs=document.querySelector('#passation .obs-box')?.value||'';
+  const record={id:Date.now(),date:new Date().toISOString().split('T')[0],operateur:`${currentUserNom} (${currentUser})`,validatedAt:new Date().toLocaleString('fr-FR'),checkItems,questions,obs,savedAt:new Date().toISOString()};
+  const hist=loadStore(KEYS.passation);hist.unshift(record);saveStore(KEYS.passation,hist);
+  showToast('Passation enregistrée ✓');
+  setTimeout(()=>{location.reload();},1500);
+}
+function toggleMini(btn,type){const row=btn.closest('.passation-item');row.querySelector('.mini-btn.ok').classList.toggle('active',type==='ok');row.querySelector('.mini-btn.nok').classList.toggle('active',type==='nok');}
+function toggleYesNo(btn,type){const row=btn.closest('.question-row');row.querySelector('.yesno-btn.yes').classList.toggle('active',type==='yes');row.querySelector('.yesno-btn.no').classList.toggle('active',type==='no');}
+
+// ===== FICHE DE SUIVI =====
+function saveData(){saveObj(KEYS.suivi,allData);}
+function initFicheSuivi(){
+  const wi=getCurrentWeekInfo();currentWeekKey=wi.key;
+  document.getElementById('suivi-week-display').textContent=` kW ${wi.wn}`;
+  document.getElementById('suivi-date-range').textContent=wi.range;
+  document.getElementById('suivi-year').textContent=wi.year;
+  document.getElementById('board-week-num').textContent=wi.wn;
+  document.getElementById('of-date').value=new Date().toISOString().split('T')[0];
+  if(!allData[currentWeekKey]) allData[currentWeekKey]=[];
+  renderOFBoard();renderWeeksList();
+}
+function launchOF(){
+  const num=document.getElementById('of-num').value.trim();const ref=document.getElementById('of-ref').value.trim();
+  const date=document.getElementById('of-date').value;const heure=document.getElementById('of-heure').value;
+  const target=parseInt(document.getElementById('of-qty-target').value);const machine=document.getElementById('of-machine').value;
+  if(!num){alert('Saisissez un N° OF');return;}if(!machine){alert('Sélectionnez une machine !');return;}if(!target||target<1){alert('Saisissez la quantité à produire');return;}
+  if(!allData[currentWeekKey]) allData[currentWeekKey]=[];
+  if(allData[currentWeekKey].find(o=>o.num===num)){alert('Un OF avec ce numéro existe déjà ce KW.');return;}
+  allData[currentWeekKey].push({num,ref,date,heure,machine,target,entries:[],closed:false,createdBy:currentUser});
+  saveData();renderOFBoard();renderWeeksList();
+  document.getElementById('of-num').value='';document.getElementById('of-ref').value='';document.getElementById('of-qty-target').value='';
+  showToast(`OF ${num} lancé ✓`);
+}
+function renderOFBoard(){
+  const ofs=allData[currentWeekKey]||[];const div=document.getElementById('of-board-content');
+  if(ofs.length===0){div.innerHTML='<div style="text-align:center;color:#aaa;font-style:italic;padding:20px;background:white;border-radius:12px;">Aucun OF lancé cette semaine</div>';return;}
+  div.innerHTML=ofs.map((of,idx)=>{
+    const produced=of.entries.reduce((s,e)=>s+e.qty,0);const remaining=Math.max(0,of.target-produced);
+    const pct=Math.min(100,Math.round(produced/of.target*100));const done=remaining===0||of.closed;
+    return `<div class="of-card ${done?'done':''}">
+      <div class="of-card-header"><span class="of-num-badge">${of.num}</span><span class="of-ref">${of.ref} · ${of.date} ${of.heure}</span>${done?'<span style="font-size:18px;">✅</span>':''}</div>
+      <div class="of-progress-bar"><div class="of-progress-fill" style="width:${pct}%"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:#999;margin-bottom:10px;"><span>${pct}% complété</span><span>${of.entries.length} saisie(s)</span></div>
+      <div class="of-stats">
+        <div class="of-stat green"><div class="val">${produced}</div><div class="lbl">Produit</div></div>
+        <div class="of-stat blue"><div class="val">${of.target}</div><div class="lbl">Objectif</div></div>
+        <div class="of-stat orange"><div class="val" style="color:${remaining===0?'#0d7c3e':'#e67e22'}">${remaining}</div><div class="lbl">Restant</div></div>
+      </div>
+      <div style="font-size:10px;color:#aaa;margin-top:8px;">${of.entries.slice(-3).map(e=>`${e.oper}: +${e.qty}`).join(' · ')}</div>
+      <div class="of-actions">
+        ${!done?`<button class="of-btn add-qty" onclick="openQtyModal(${idx})">➕ Saisir quantité</button>`:''}
+        ${!of.closed?`<button class="of-btn close-of" onclick="closeOF(${idx})">🔒 Clôturer</button>`:'<span style="font-size:12px;color:#2e7d32;font-weight:700;">✅ Clôturé</span>'}
+      </div>
+    </div>`;
+  }).join('');
+}
+function renderWeeksList(){
+  const keys=Object.keys(allData).sort().reverse();const div=document.getElementById('weeks-list');
+  if(keys.length===0){div.innerHTML='<div style="font-size:12px;color:#aaa;text-align:center;padding:8px;">Aucune semaine</div>';return;}
+  div.innerHTML=keys.map(k=>{
+    const ofs=allData[k];const totalTarget=ofs.reduce((s,o)=>s+o.target,0);const totalProduced=ofs.reduce((s,o)=>s+o.entries.reduce((ss,e)=>ss+e.qty,0),0);
+    const isCurrent=k===currentWeekKey;const[yr,sw]=k.split('-S');
+    return `<div class="hist-week-item" style="background:${isCurrent?'#e8eaf6':'white'}">
+      <div><div style="font-size:13px;font-weight:700;color:#1a237e;">📅 KW ${parseInt(sw)} — ${yr}</div>
+      <div style="font-size:11px;color:#888;margin-top:2px;">${ofs.length} OF(s) · Produit: <b style="color:#0d7c3e">${totalProduced}</b> / <b>${totalTarget}</b></div></div>
+      <div style="display:flex;gap:6px;"><button onclick="exportWeek('${k}')" style="background:#1a6e2e;color:white;border:none;border-radius:6px;padding:6px 10px;font-size:11px;cursor:pointer;">📥 Excel</button></div>
+    </div>`;
+  }).join('');
+}
+function openQtyModal(idx){activeOFIdx=idx;const of=allData[currentWeekKey][idx];const produced=of.entries.reduce((s,e)=>s+e.qty,0);const remaining=of.target-produced;document.getElementById('qty-modal-of-label').textContent=`OF: ${of.num} · Restant: ${remaining}`;document.getElementById('qty-modal-oper').textContent=`${currentUserNom} (${currentUser})`;document.getElementById('qty-modal-input').value='';document.getElementById('qty-modal').classList.add('open');setTimeout(()=>document.getElementById('qty-modal-input').focus(),100);}
+function closeQtyModal(){document.getElementById('qty-modal').classList.remove('open');activeOFIdx=null;}
+function confirmQty(){const qty=parseInt(document.getElementById('qty-modal-input').value);if(!qty||qty<1){alert('Saisissez une quantité valide');return;}const of=allData[currentWeekKey][activeOFIdx];of.entries.push({qty,oper:currentUser,nom:currentUserNom,ts:new Date().toISOString()});saveData();closeQtyModal();renderOFBoard();renderWeeksList();showToast(`+${qty} enregistré pour ${of.num} ✓`);}
+function closeOF(idx){if(!confirm('Clôturer cet OF ?')) return;allData[currentWeekKey][idx].closed=true;saveData();renderOFBoard();renderWeeksList();showToast('OF clôturé ✓');}
+
+// ===== ACTION CORRECTIVE =====
+function setSeverity(level,btn){severity=level;document.querySelectorAll('.sev-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
+function submitAction(){
+  const desc=document.getElementById('ac-desc').value.trim();if(!desc){alert('Décrivez le problème');return;}
+  const record={
+    id:Date.now(),date:document.getElementById('ac-date').value,technicien:document.getElementById('ac-tech').value||`${currentUserNom} (${currentUser})`,
+    zone:document.getElementById('ac-zone').value,description:desc,cause:document.getElementById('ac-cause').value,
+    action:document.getElementById('ac-action').value,severity:severity||'non défini',
+    status:document.getElementById('ac-status').value,savedAt:new Date().toISOString()
+  };
+  const hist=loadStore(KEYS.actions);hist.unshift(record);saveStore(KEYS.actions,hist);
+  showToast('Déclaration soumise & sauvegardée ✓');
+  setTimeout(()=>{document.getElementById('ac-desc').value='';document.getElementById('ac-cause').value='';document.getElementById('ac-action').value='';document.getElementById('ac-zone').value='';document.querySelectorAll('.sev-btn').forEach(b=>b.classList.remove('active'));severity='';},500);
+}
+
+// ===== HISTORIQUE MODAL =====
+function openHistModal(){
+  document.getElementById('hist-modal').classList.add('open');
+  renderHistTab(currentHistTab);
+}
+function closeHistModal(){document.getElementById('hist-modal').classList.remove('open');}
+function switchHistTab(tab,btn){
+  currentHistTab=tab;
+  document.querySelectorAll('.hist-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  renderHistTab(tab);
+}
+
+function fmtDate(iso){if(!iso||iso==='—') return '—';try{return new Date(iso).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric'});}catch(e){return iso;}}
+function fmtDateTime(iso){if(!iso) return '—';try{return new Date(iso).toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});}catch(e){return iso;}}
+
+function renderHistTab(tab){
+  const body=document.getElementById('hist-body');
+  if(tab==='checklist') renderHistChecklist(body);
+  else if(tab==='passation') renderHistPassation(body);
+  else if(tab==='suivi') renderHistSuivi(body);
+  else if(tab==='maintenance') renderHistMaint(body);
+  else if(tab==='actions') renderHistActions(body);
+}
+
+function renderHistChecklist(body){
+  const hist=loadStore(KEYS.checklist);
+  if(!hist.length){body.innerHTML='<div class="hist-empty">Aucun rapport checklist enregistré</div>';return;}
+  const totalRecs=hist.length;const avgPct=Math.round(hist.reduce((s,r)=>s+r.pct,0)/totalRecs);
+  let html=`<div class="hist-stats-row">
+    <div class="hstat"><div class="hval">${totalRecs}</div><div class="hlbl">Rapports</div></div>
+    <div class="hstat"><div class="hval">${avgPct}%</div><div class="hlbl">Conf. moy.</div></div>
+    <div class="hstat"><div class="hval">${hist.filter(r=>r.nok>0).length}</div><div class="hlbl">Avec NOK</div></div>
+  </div>`;
+  hist.forEach(r=>{
+    html+=`<div class="hist-entry">
+      <div class="hist-entry-header">
+        <span style="font-size:12px;font-weight:700;color:#1a237e;">📅 ${fmtDate(r.date)} · ${r.shift}</span>
+        <span class="hist-entry-badge ${r.nok>0?'hbadge-nok':'hbadge-ok'}">${r.pct}% ✓</span>
+      </div>
+      <div class="hist-entry-info">👷 ${r.operateur} · ✓ ${r.ok} OK · ✗ ${r.nok} NOK · — ${r.pending} non scannés</div>
+      <div style="font-size:10px;color:#aaa;margin-top:2px;">Sauvegardé le ${fmtDateTime(r.savedAt)}</div>
+    </div>`;
+  });
+  body.innerHTML=html;
+}
+
+function renderHistPassation(body){
+  const hist=loadStore(KEYS.passation);
+  if(!hist.length){body.innerHTML='<div class="hist-empty">Aucune passation enregistrée</div>';return;}
+  let html=`<div class="hist-stats-row"><div class="hstat"><div class="hval">${hist.length}</div><div class="hlbl">Passations</div></div></div>`;
+  hist.forEach(r=>{
+    const nok=r.checkItems?.filter(c=>c.result==='NOK').length||0;
+    html+=`<div class="hist-entry">
+      <div class="hist-entry-header">
+        <span style="font-size:12px;font-weight:700;color:#1a237e;">📅 ${fmtDate(r.date)}</span>
+        <span class="hist-entry-badge ${nok>0?'hbadge-nok':'hbadge-ok'}">${nok>0?nok+' NOK':'✓ OK'}</span>
+      </div>
+      <div class="hist-entry-info">👷 ${r.operateur}</div>
+      ${r.obs?`<div style="font-size:11px;color:#666;margin-top:4px;font-style:italic;">📝 ${r.obs.slice(0,80)}${r.obs.length>80?'...':''}</div>`:''}
+      <div style="font-size:10px;color:#aaa;margin-top:2px;">Validé le ${r.validatedAt||'—'}</div>
+    </div>`;
+  });
+  body.innerHTML=html;
+}
+
+function renderHistSuivi(body){
+  const data=loadObj(KEYS.suivi);const keys=Object.keys(data).sort().reverse();
+  if(!keys.length){body.innerHTML='<div class="hist-empty">Aucune fiche de suivi enregistrée</div>';return;}
+  const totalOFs=keys.reduce((s,k)=>s+data[k].length,0);
+  const totalProd=keys.reduce((s,k)=>s+data[k].reduce((ss,o)=>ss+o.entries.reduce((sss,e)=>sss+e.qty,0),0),0);
+  let html=`<div class="hist-stats-row">
+    <div class="hstat"><div class="hval">${keys.length}</div><div class="hlbl">Semaines</div></div>
+    <div class="hstat"><div class="hval">${totalOFs}</div><div class="hlbl">Total OFs</div></div>
+    <div class="hstat"><div class="hval">${totalProd.toLocaleString('fr-FR')}</div><div class="hlbl">Prod. totale</div></div>
+  </div>`;
+  keys.forEach(k=>{
+    const ofs=data[k];const[yr,sw]=k.split('-S');
+    const prod=ofs.reduce((s,o)=>s+o.entries.reduce((ss,e)=>ss+e.qty,0),0);
+    const target=ofs.reduce((s,o)=>s+o.target,0);
+    const closed=ofs.filter(o=>o.closed).length;
+    html+=`<div class="hist-entry">
+      <div class="hist-entry-header">
+        <span style="font-size:13px;font-weight:700;color:#1a237e;">📅 KW ${parseInt(sw)} — ${yr}</span>
+        <span class="hist-entry-badge hbadge-done">${closed}/${ofs.length} clôturés</span>
+      </div>
+      <div class="hist-entry-info">📦 ${ofs.length} OF(s) · Produit: <b>${prod.toLocaleString('fr-FR')}</b> / <b>${target.toLocaleString('fr-FR')}</b></div>
+      <button onclick="exportWeek('${k}')" style="margin-top:6px;background:#1a6e2e;color:white;border:none;border-radius:6px;padding:5px 10px;font-size:10px;cursor:pointer;">📥 Excel KW${parseInt(sw)}</button>
+    </div>`;
+  });
+  body.innerHTML=html;
+}
+
+function renderHistMaint(body){
+  const hist=loadStore(KEYS.maintenance);
+  if(!hist.length){body.innerHTML='<div class="hist-empty">Aucune checklist maintenance enregistrée</div>';return;}
+  let html=`<div class="hist-stats-row">
+    <div class="hstat"><div class="hval">${hist.length}</div><div class="hlbl">Checklists</div></div>
+    <div class="hstat"><div class="hval">${hist.filter(r=>r.nok>0).length}</div><div class="hlbl">Avec NOK</div></div>
+  </div>`;
+  hist.forEach(r=>{
+    html+=`<div class="hist-entry">
+      <div class="hist-entry-header">
+        <span style="font-size:12px;font-weight:700;color:#1a237e;">📅 ${fmtDate(r.date)} · ${r.shift}</span>
+        <span class="hist-entry-badge ${r.nok>0?'hbadge-nok':'hbadge-ok'}">${r.nok>0?r.nok+' NOK':'✓ OK'}</span>
+      </div>
+      <div class="hist-entry-info">🔧 ${r.technicien} · Fiche: ${r.fiche} · ✓ ${r.ok} OK · ✗ ${r.nok} NOK</div>
+      ${r.obs?`<div style="font-size:11px;color:#666;margin-top:3px;">📝 ${r.obs.slice(0,80)}</div>`:''}
+    </div>`;
+  });
+  body.innerHTML=html;
+}
+
+function renderHistActions(body){
+  const hist=loadStore(KEYS.actions);
+  if(!hist.length){body.innerHTML='<div class="hist-empty">Aucune action corrective enregistrée</div>';return;}
+  const open=hist.filter(r=>r.status==='open').length;const prog=hist.filter(r=>r.status==='progress').length;const closed=hist.filter(r=>r.status==='closed').length;
+  let html=`<div class="hist-stats-row">
+    <div class="hstat"><div class="hval" style="color:#e65100;">${open}</div><div class="hlbl">Ouverts</div></div>
+    <div class="hstat"><div class="hval" style="color:#1565c0;">${prog}</div><div class="hlbl">En cours</div></div>
+    <div class="hstat"><div class="hval" style="color:#2e7d32;">${closed}</div><div class="hlbl">Résolus</div></div>
+  </div>`;
+  hist.forEach(r=>{
+    const sevColor={low:'#2e7d32',med:'#f57f17',high:'#c62828','non défini':'#999'}[r.severity]||'#999';
+    const statusBadge={open:'hbadge-open',progress:'hbadge-progress',closed:'hbadge-done'}[r.status]||'hbadge-open';
+    const statusLabel={open:'Ouvert',progress:'En cours',closed:'Résolu'}[r.status]||r.status;
+    html+=`<div class="hist-entry">
+      <div class="hist-entry-header">
+        <span style="font-size:12px;font-weight:700;color:#1a237e;">📅 ${fmtDateTime(r.date)}</span>
+        <span class="hist-entry-badge ${statusBadge}">${statusLabel}</span>
+      </div>
+      <div class="hist-entry-info" style="font-weight:600;">🏭 ${r.zone||'—'}</div>
+      <div class="hist-entry-info">${r.description?.slice(0,80)||'—'}${r.description?.length>80?'...':''}</div>
+      <div style="font-size:10px;margin-top:4px;"><span style="color:${sevColor};font-weight:700;">● ${r.severity}</span> · 🔧 ${r.technicien||'—'}</div>
+    </div>`;
+  });
+  body.innerHTML=html;
+}
+
+// ===== EXPORT FUNCTIONS =====
+function dlCSV(csv,filename){const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=filename;a.click();URL.revokeObjectURL(url);}
+
+function exportHistTab(){
+  if(currentHistTab==='checklist') exportChecklistHist();
+  else if(currentHistTab==='passation') exportPassationHist();
+  else if(currentHistTab==='suivi') exportAllWeeks();
+  else if(currentHistTab==='maintenance') exportMaintHist();
+  else if(currentHistTab==='actions') exportActionsHist();
+}
+
+function exportChecklistHist(){
+  const hist=loadStore(KEYS.checklist);if(!hist.length){alert('Aucune donnée checklist');return;}
+  const BOM='\uFEFF';
+  let csv=BOM+'Historique Checklist NIV0 QR Code\nDate;Shift;Opérateur;Total;OK;NOK;Non scanné;Taux conformité\n';
+  hist.forEach(r=>{csv+=`${r.date};${r.shift};${r.operateur};${r.total};${r.ok};${r.nok};${r.pending};${r.pct}%\n`;});
+  csv+='\nDétail par rapport\n';
+  hist.forEach(r=>{
+    csv+=`\nDate: ${r.date} · Shift: ${r.shift} · Opérateur: ${r.operateur}\nZone;Machine;Code;Résultat\n`;
+    niv0CommonItems.forEach(item=>{const uid=`NIV0-${item.id}`;csv+=`COMMUNE;;${uid};${r.results?.[uid]||'—'}\n`;});
+    MACHINES.forEach((machine,mIdx)=>{niv0MachineItems.forEach(item=>{const uid=`NIV0-M${mIdx+1}_${item.id}`;csv+=`MACHINE;${machine};${uid};${r.results?.[uid]||'—'}\n`;});});
+  });
+  dlCSV(csv,`Historique_Checklist_NIV0.csv`);showToast('Export checklist ✓');
+}
+
+function exportPassationHist(){
+  const hist=loadStore(KEYS.passation);if(!hist.length){alert('Aucune passation');return;}
+  const BOM='\uFEFF';
+  let csv=BOM+'Historique Passations\nDate;Opérateur;Validé le;Observations\n';
+  hist.forEach(r=>{
+    csv+=`${r.date};${r.operateur};${r.validatedAt||'—'};"${(r.obs||'').replace(/"/g,"'")}"\n`;
+  });
+  csv+='\nDétail points de contrôle\n';
+  hist.forEach(r=>{
+    csv+=`\nDate: ${r.date} · Opérateur: ${r.operateur}\nPoint;Résultat\n`;
+    (r.checkItems||[]).forEach(c=>{csv+=`"${c.label}";${c.result}\n`;});
+    csv+='Questions;Réponse\n';
+    (r.questions||[]).forEach(q=>{csv+=`"${q.label}";${q.result}\n`;});
+  });
+  dlCSV(csv,`Historique_Passations.csv`);showToast('Export passation ✓');
+}
+
+function exportMaintHist(){
+  const hist=loadStore(KEYS.maintenance);if(!hist.length){alert('Aucune maintenance');return;}
+  const BOM='\uFEFF';
+  let csv=BOM+'Historique Maintenance Niveau 1\nDate;Shift;Technicien;N° Fiche;OK;NOK;Total;Observations\n';
+  hist.forEach(r=>{csv+=`${r.date};${r.shift};${r.technicien};${r.fiche};${r.ok};${r.nok};${r.total};"${(r.obs||'').replace(/"/g,"'")}"\n`;});
+  csv+='\nDétail par rapport\n';
+  hist.forEach(r=>{
+    csv+=`\nDate: ${r.date} · Technicien: ${r.technicien} · Fiche: ${r.fiche}\nÉtape;Zone;Action;Résultat\n`;
+    (r.results||[]).forEach(res=>{csv+=`${res.step};"${res.zone}";"${maintItems.find(m=>m.step===res.step)?.action||''}";${res.result}\n`;});
+  });
+  dlCSV(csv,`Historique_Maintenance.csv`);showToast('Export maintenance ✓');
+}
+
+function exportActionsHist(){
+  const hist=loadStore(KEYS.actions);if(!hist.length){alert('Aucune action corrective');return;}
+  const BOM='\uFEFF';
+  let csv=BOM+'Historique Actions Correctives\nDate;Technicien;Zone;Description;Cause;Action;Gravité;Statut\n';
+  hist.forEach(r=>{csv+=`"${r.date}";"${r.technicien}";"${r.zone}";"${(r.description||'').replace(/"/g,"'")}";"${(r.cause||'').replace(/"/g,"'")}";"${(r.action||'').replace(/"/g,"'")}";"${r.severity}";"${r.status}"\n`;});
+  dlCSV(csv,`Historique_Actions_Correctives.csv`);showToast('Export actions ✓');
+}
+
+function exportHistAll(){
+  const BOM='\uFEFF';let csv=BOM;
+  // Checklist
+  const chk=loadStore(KEYS.checklist);
+  csv+='=== CHECKLIST NIV0 ===\nDate;Shift;Opérateur;Total;OK;NOK;Non scanné;Taux\n';
+  chk.forEach(r=>{csv+=`${r.date};${r.shift};${r.operateur};${r.total};${r.ok};${r.nok};${r.pending};${r.pct}%\n`;});
+  // Passation
+  const pass=loadStore(KEYS.passation);
+  csv+='\n=== PASSATIONS ===\nDate;Opérateur;Validé le;Observations\n';
+  pass.forEach(r=>{csv+=`${r.date};${r.operateur};${r.validatedAt||'—'};"${(r.obs||'').replace(/"/g,"'")}"\n`;});
+  // OF Suivi
+  const data=loadObj(KEYS.suivi);const keys=Object.keys(data).sort();
+  csv+='\n=== FICHE DE SUIVI OFs ===\nKW;N° OF;Référence;Date;Machine;Objectif;Produit;Statut\n';
+  keys.forEach(k=>{const[yr,sw]=k.split('-S');data[k].forEach(of=>{const prod=of.entries.reduce((s,e)=>s+e.qty,0);csv+=`KW${parseInt(sw)}-${yr};${of.num};${of.ref};${of.date};${of.machine};${of.target};${prod};${of.closed?'Clôturé':'En cours'}\n`;});});
+  // Maintenance
+  const maint=loadStore(KEYS.maintenance);
+  csv+='\n=== MAINTENANCE ===\nDate;Shift;Technicien;N° Fiche;OK;NOK;Observations\n';
+  maint.forEach(r=>{csv+=`${r.date};${r.shift};${r.technicien};${r.fiche};${r.ok};${r.nok};"${(r.obs||'').replace(/"/g,"'")}"\n`;});
+  // Actions correctives
+  const acts=loadStore(KEYS.actions);
+  csv+='\n=== ACTIONS CORRECTIVES ===\nDate;Technicien;Zone;Description;Gravité;Statut\n';
+  acts.forEach(r=>{csv+=`"${r.date}";"${r.technicien}";"${r.zone}";"${(r.description||'').replace(/"/g,"'")}";"${r.severity}";"${r.status}"\n`;});
+  dlCSV(csv,`Export_Complet_${new Date().toISOString().split('T')[0]}.csv`);
+  showToast('Export complet téléchargé ✓');
+}
+
+// ===== SUIVI EXPORT =====
+function buildCSV(weekKey){
+  const ofs=allData[weekKey]||[];const[yr,sw]=weekKey.split('-S');
+  const BOM='\uFEFF';const sep=';';
+  let csv=BOM+`Fiche de Suivi Production${sep}Semaine ${parseInt(sw)}${sep}${yr}\nExporté le${sep}${new Date().toLocaleString('fr-FR')}\n\n`;
+  ofs.forEach(of=>{
+    const produced=of.entries.reduce((s,e)=>s+e.qty,0);const remaining=Math.max(0,of.target-produced);
+    csv+=`N° OF${sep}Référence${sep}Date${sep}Heure${sep}Machine${sep}Objectif${sep}Produit${sep}Restant${sep}Statut\n${of.num}${sep}${of.ref}${sep}${of.date}${sep}${of.heure}${sep}${of.machine}${sep}${of.target}${sep}${produced}${sep}${remaining}${sep}${of.closed?'Clôturé':'En cours'}\n`;
+    if(of.entries.length>0){csv+=`Saisies:\nOpérateur${sep}Nom${sep}Qté${sep}Horodatage\n`;of.entries.forEach(e=>{csv+=`${e.oper}${sep}${e.nom||''}${sep}${e.qty}${sep}${e.ts||''}\n`;});}
+    csv+='\n';
+  });
+  return csv;
+}
+function exportWeek(weekKey){if(!allData[weekKey]||!allData[weekKey].length){alert('Aucune donnée.');return;}const[yr,sw]=weekKey.split('-S');dlCSV(buildCSV(weekKey),`Production_S${sw}_${yr}.csv`);showToast('Export téléchargé ✓');}
+function exportExcel(){exportWeek(currentWeekKey);}
+function exportAllWeeks(){const keys=Object.keys(allData).sort();if(!keys.length){alert('Aucune donnée.');return;}let csv='\uFEFF';keys.forEach(k=>{csv+=buildCSV(k).replace('\uFEFF','')+'\n';});dlCSV(csv,'Production_Toutes_KWs.csv');showToast('Export complet ✓');}
+
+// ===== TOAST =====
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+
+function toggleCheck(btn,type){
+  const row=btn.closest('.checklist-item');
+  row.querySelector('.check-btn.ok').classList.toggle('active',type==='ok'&&!btn.classList.contains('active'));
+  row.querySelector('.check-btn.nok').classList.toggle('active',type==='nok'&&!btn.classList.contains('active'));
+  if(type==='ok') row.querySelector('.check-btn.nok').classList.remove('active');
+  else row.querySelector('.check-btn.ok').classList.remove('active');
+}
+</script>
+</body>
+</html>
